@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\HumanBenchmark.API.props" />
+</Project>
