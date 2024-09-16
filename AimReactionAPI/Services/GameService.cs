@@ -89,5 +89,14 @@ namespace AimReactionAPI.Services
             }
             return gameService;
         }
+        public void saveGame(GameService gameService)
+        {
+            Console.WriteLine("Game Service Data:");
+
+            foreach (var property in gameService.GetType().GetProperties())
+            {
+                Console.WriteLine($"{property.Name}: {property.GetValue(gameService)}");
+            }
+        } 
     }
 }
