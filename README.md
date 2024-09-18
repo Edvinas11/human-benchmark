@@ -10,6 +10,7 @@ This solution is designed to measure and improve users' reaction time.
 ## Technologies Used
 Front-end:
 - React
+
 Back-end:
 - .NET 8
 - C#
