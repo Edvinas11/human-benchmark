@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ExchangeAPI" Version="1.543.1922" />
+    <!--<PackageReference Include="ExchangeAPI" Version="1.543.1922" />-->
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 

@@ -18,6 +18,6 @@ namespace AimReactionAPI.Models
 
         public int GameDuration { get; set; }
 
-        public User User { get; set; }
+        public GameType GameType { get; set; }
     }
 }

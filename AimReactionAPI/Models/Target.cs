@@ -2,17 +2,19 @@
 
 namespace AimReactionAPI.Models
 {
-    public class Target
+    public struct Target
     {
-        [Key]
-        public int TargetId { get; set; }
-
-        [Required]
-        public string Shape { get; set; }
-
-        [Required]
+        public int X { get; set; }
+        public int Y { get; set; }
         public int Size { get; set; }
-
         public int Speed { get; set; }
+
+        public Target(int x, int y, int size, int speed)
+        {
+            X = x;
+            Y = y;
+            Size = size;
+            Speed = speed;
+        }
     }
 }
