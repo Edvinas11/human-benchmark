@@ -10,6 +10,7 @@ This solution is designed to measure and improve users' reaction time.
 ## Technologies Used
 Front-end:
 - React
+
 Back-end:
 - .NET 8
 - C#
@@ -42,4 +43,3 @@ Back-end:
   
 ## Use-Case Diagram
 ![image](https://github.com/user-attachments/assets/aee5af79-8ee2-471e-a13a-24ee1c472ee1)
-
