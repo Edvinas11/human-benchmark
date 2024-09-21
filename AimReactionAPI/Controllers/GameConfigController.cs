@@ -35,7 +35,7 @@ namespace AimReactionAPI.Controllers
                     await file.CopyToAsync(stream);
                 }
 
-                var gameConfig = await _fileService.ParseTextFileAsync(tempFilePath);
+                var gameConfig = await _fileService.ParseJsonFileAsync(tempFilePath);
 
                 if (gameConfig == null)
                 {

@@ -1,0 +1,8 @@
+{
+    "UserId": 1,
+    "DifficultyLevel": "Hard",
+    "TargetSpeed": 5,
+    "MaxTargets": 10,
+    "GameDuration": 120,
+    "GameType": "MovingTargets"
+}

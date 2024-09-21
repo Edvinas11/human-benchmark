@@ -1,11 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using AimReactionAPI.Models;
-
-/*
-TEST .TXT FILE EXAMPLE
-1, Hard, 5, 10, 120
-*/
+using Microsoft.Extensions.Logging;
 
 namespace AimReactionAPI.Services
 {
@@ -18,38 +17,55 @@ namespace AimReactionAPI.Services
             _logger = logger;
         }
 
-        public async Task<GameConfig> ParseTextFileAsync(string filePath)
+        public async Task<GameConfig> ParseJsonFileAsync(string filePath)
         {
             GameConfig gameConfig = null;
 
             try
             {
                 using var reader = new StreamReader(filePath);
-                string line = await reader.ReadLineAsync();
+                string jsonContent = await reader.ReadToEndAsync();
 
-                if (line != null)
+                var options = new JsonSerializerOptions
                 {
-                    var values = line.Split(',');
+                    PropertyNameCaseInsensitive = true
+                };
+                options.Converters.Add(new JsonStringEnumConverterIgnoreCase<GameType>());
 
-                    Enum.TryParse(values[5].Trim(), out GameType gameType);
-
-                    gameConfig = new GameConfig
-                    {
-                        UserId = int.Parse(values[0].Trim()),
-                        DifficultyLevel = values[1].Trim(),
-                        TargetSpeed = int.Parse(values[2].Trim()),
-                        MaxTargets = int.Parse(values[3].Trim()),
-                        GameDuration = int.Parse(values[4].Trim()),
-                        GameType = gameType
-                    };
-                }
+                gameConfig = JsonSerializer.Deserialize<GameConfig>(jsonContent, options);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error while parsing text file at {FilePath}", filePath);
+                _logger.LogError(e, "Error while parsing JSON file at {FilePath}", filePath);
             }
 
             return gameConfig;
+        }
+    }
+
+    // helps convert enum to string correctly
+    public class JsonStringEnumConverterIgnoreCase<T> : JsonConverter<T> where T : struct, Enum
+    {
+        public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TokenType != JsonTokenType.String)
+            {
+                throw new JsonException();
+            }
+
+            var enumValue = reader.GetString();
+
+            if (Enum.TryParse(enumValue, true, out T result))
+            {
+                return result;
+            }
+
+            throw new JsonException($"Unable to convert \"{enumValue}\" to Enum \"{typeof(T)}\".");
+        }
+
+        public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToString());
         }
     }
 }
