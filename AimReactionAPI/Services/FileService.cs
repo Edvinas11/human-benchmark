@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using AimReactionAPI.Models;
+using AimReactionAPI.Data;
 
 /*
 TEST .TXT FILE EXAMPLE
@@ -12,10 +13,12 @@ namespace AimReactionAPI.Services
     public class FileService
     {
         private readonly ILogger<FileService> _logger;
+        private readonly AppDbContext _context;
 
-        public FileService(ILogger<FileService> logger)
+        public FileService(ILogger<FileService> logger, AppDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public async Task<GameConfig> ParseTextFileAsync(string filePath)
@@ -42,6 +45,9 @@ namespace AimReactionAPI.Services
                         GameDuration = int.Parse(values[4].Trim()),
                         GameType = gameType
                     };
+
+                    _context.GameConfigs.Add(gameConfig);
+                    _context.SaveChanges();
                 }
             }
             catch (Exception e)
