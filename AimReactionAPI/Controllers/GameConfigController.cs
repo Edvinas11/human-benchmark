@@ -1,4 +1,5 @@
-﻿using AimReactionAPI.Services;
+﻿using AimReactionAPI.Models;
+using AimReactionAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,39 +20,24 @@ namespace AimReactionAPI.Controllers
 
         // POST api/gameconfig/upload
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadGameConfig(IFormFile file)
+        public async Task<IActionResult> UploadGameConfig([FromBody] GameConfig gameConfig)
         {
-            if (file == null || file.Length == 0)
+            if (gameConfig == null)
             {
-                return BadRequest("No file uploaded.");
+                return BadRequest("Invalid game configuration data.");
             }
-
-            var tempFilePath = Path.GetTempFileName();
 
             try
             {
-                using (var stream = new FileStream(tempFilePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-
-                var gameConfig = await _fileService.ParseJsonFileAsync(tempFilePath);
-
-                if (gameConfig == null)
-                {
-                    return BadRequest("Failed to parse the game configuration.");
-                }
+                // Save the game config to the database
+                await _fileService.SaveGameConfigAsync(gameConfig);
 
                 return Ok(gameConfig);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error while saving game configuration.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-            finally
-            {
-                if (System.IO.File.Exists(tempFilePath))
-                    System.IO.File.Delete(tempFilePath);
             }
         }
     }
