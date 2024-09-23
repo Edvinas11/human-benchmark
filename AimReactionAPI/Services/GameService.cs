@@ -1,6 +1,9 @@
 ﻿using AimReactionAPI.Models;
 using AimReactionAPI.Services;
+using System;
+using System.Net.NetworkInformation;
 using System.Reflection.Metadata.Ecma335;
+using System.Text.Json;
 
 //From FileService.cs we get a gameConfig object. 
 // gameConfig object contains: GameConfigId, userId, DifficultyLevel, etc.
@@ -18,85 +21,88 @@ namespace AimReactionAPI.Services
         public int TargetSpeed { get; set; }
         public int MaxTargets { get; set; }
         public int GameDuration { get; set; }
-        
-        //public void createScore()
-        //{
-        //    Score score = null;
-        //    try
-        //    {
-        //        score = new Score
-        //        {
-        //            ScoreId = this.ScoreId,
-        //            UserId = this.UserId,
-        //            // GameConfigId = this.GameId,
-        //            ScoreValue = 0,
-        //            TimeStamp = DateTime.Now,
-        //        };
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine($"Error creating score object: {e.Message}");
-        //    }
-        //}
-        //public Target createTarget()
-        //{
-        //    Target target = null;
-        //    try
-        //    {
-        //        target = new Target
-        //        {   
-        //            //creating a target with random data
-        //            TargetId = this.TargetId,
-        //            Shape = "Circle",
-        //            Size = 10,
-        //            Speed = 3,
-        //        };
-        //    }
-        //    catch(Exception e)
-        //    {
-        //        Console.WriteLine($"Error creating target object: {e.Message}");
-        //    }
-        //    return target;
-        //}
+        public GameType GameType { get; set; }
 
-        //public GameService createGame(GameConfig gameConfig)
-        //{
-        //    GameService gameService = null;
-        //    try
-        //    {
-        //        gameService = new GameService
-        //        {
-        //            // assign gameProperties from gameConfig
+        public GameService CreateGameService(GameConfig gameConfig)
+        {
+            GameService gameService = null;
+            try
+            {
+                gameService = new GameService
+                {
+                    GameId = gameConfig.GameConfigId,
+                    UserId = gameConfig.UserId,
+                    DifficultyLevel = gameConfig.DifficultyLevel,
+                    TargetSpeed = gameConfig.TargetSpeed,
+                    MaxTargets = gameConfig.MaxTargets,
+                    GameDuration = gameConfig.GameDuration,
+                    GameType = gameConfig.GameType
+                };
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error while creating a game: {e.Message}");
+            }
+            return gameService;
+        }
 
-        //            //GameId = gameConfig.GameConfigId,
-        //            UserId = gameConfig.UserId,
-        //            DifficultyLevel = gameConfig.DifficultyLevel,
-        //            TargetSpeed = gameConfig.TargetSpeed,
-        //            MaxTargets = gameConfig.MaxTargets,
-        //            GameDuration = gameConfig.GameDuration,
+        public void CreateScore()
+        {
+            Score score = null;
+            try
+            {
+                score = new Score
+                {
+                    ScoreId = ScoreId,
+                    UserId = UserId,
+                    Value = 0,
+                    Timestamp = DateTime.Now,
+                    GameType = GameType,
+                };
+            }
+            catch (Exception e)
+            {
+               Console.WriteLine($"Error creating score object: {e.Message}");
+            }
+        }
+        //creating a method to create a target object is unnecessary, since Target itself
+        // has a constructor.
+        public Target CreateRandomTarget(int maxX, int maxY, int size, int speed)
+        {
+            Target target = null;
+            try
+            {
+                Random random = new Random();
+                int randomX = random.Next(maxX);
+                int randomY = random.Next(maxY);
+                Coordinates randomPosition = new Coordinates(randomX, randomY);
+                target = new Target(randomPosition, size, speed);
+                return target;
+            }
+            catch (Exception e) {
+                Console.WriteLine($"Error creating target object: {e.Message}");
+            }
+            return target;
+        }
 
-        //            //initialize Id for target and score objects
-        //            TargetId = 0,
-        //            ScoreId = 0
-        //        };
-        //        //creating one target with Id of 0
-        //        createTarget();
-        //        createScore(); 
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine($"Error while creating a game: {e.Message}");
-        //    }
-        //    return gameService;
-        //}
-        //public void saveGame(GameService gameService)
-        //{
-        //    Console.WriteLine("Game Service Data:");
+        // save GameService in json format
+        public void SaveGame(GameService gameService)
+        {
+            try
+            {
+                string json = JsonSerializer.Serialize(gameService, new JsonSerializerOptions
+                {
+                    WriteIndented = true 
+                });
 
-        //    foreach (var property in gameService.GetType().GetProperties())
-        //    {
-        //        Console.WriteLine($"{property.Name}: {property.GetValue(gameService)}");
-        //    }
-        //} 
+                Console.WriteLine("Game Service Data in JSON format:");
+                Console.WriteLine(json);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error while saving game data: {e.Message}");
+            }
+        }
     }
 }
