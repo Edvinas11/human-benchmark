@@ -1,0 +1,12 @@
+.home {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.wrapper {
+  max-width: 1280px;
+  width: 100%; /* Ensures full width on smaller screens */
+  padding: 0 20px; /* Adds padding to prevent content from touching the edges */
+  margin: 0 auto; /* Centers the content */
+}

@@ -1,0 +1,24 @@
+.searchBar {
+    display: flex;
+    width: 480px;
+    min-width: 160px;
+    max-width: 480px;
+    flex-direction: row;
+    align-items: center;
+    background-color: #0e1a24;
+    border-radius: 12px;
+    padding: 8px 10px;
+}
+
+.icon {
+    height: 20px;
+}
+
+.searchInput {
+    background: none;
+    border: none;
+    margin: 8px 8px;
+    width: 100%;
+    outline: none;
+    font-family: "Space Grotesk";
+}
