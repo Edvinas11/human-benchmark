@@ -12,7 +12,7 @@ namespace AimReactionAPI.Services
 {
     public class GameService
     {
-        // Get/set staments iškelti į failą panašų į GameConfig.cs?
+        public List<GameService> _gameServices = new List<GameService>();
         public int GameId { get; set; }
         public int TargetId {  get; set; }
         public int ScoreId { get; set; }
@@ -38,12 +38,19 @@ namespace AimReactionAPI.Services
                     GameDuration = gameConfig.GameDuration,
                     GameType = gameConfig.GameType
                 };
+                //add gameService object to the list of GameServices
+                _gameServices.Add(gameService);
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Error while creating a game: {e.Message}");
             }
             return gameService;
+        }
+
+        public List<GameService> GetAllGames()
+        {
+            return _gameServices;
         }
 
         public void CreateScore()
@@ -65,13 +72,11 @@ namespace AimReactionAPI.Services
                Console.WriteLine($"Error creating score object: {e.Message}");
             }
         }
-        //creating a method to create a target object is unnecessary, since Target itself
-        // has a constructor.
-        
 
         // save GameService in json format
         public void SaveGame(GameService gameService)
         {
+            //probably needs to be saved to the database?
             try
             {
                 string json = JsonSerializer.Serialize(gameService, new JsonSerializerOptions

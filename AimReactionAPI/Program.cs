@@ -17,6 +17,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<GameService>();
+builder.Services.AddScoped<TargetService>();
 
 var app = builder.Build();
 

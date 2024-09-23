@@ -24,6 +24,8 @@ namespace AimReactionAPI.Services
         {
             _targets.Add(target);
         }
+        //creating a method to create a target object is unnecessary, since Target itself
+        // has a constructor.
         public Target CreateRandomTarget(int maxX, int maxY, int size, int speed)
         {
             Target target = null;
