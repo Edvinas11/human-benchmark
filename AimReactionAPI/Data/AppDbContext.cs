@@ -13,11 +13,6 @@ namespace AimReactionAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                        .HasMany(u => u.Scores)
-                        .WithOne()
-                        .HasForeignKey(s => s.UserId);
-
             modelBuilder.Entity<GameConfig>()
                         .Property(g => g.GameType)
                         .HasConversion<string>();

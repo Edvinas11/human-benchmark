@@ -16,7 +16,6 @@ namespace AimReactionAPI.Services
         public int GameId { get; set; }
         public int TargetId {  get; set; }
         public int ScoreId { get; set; }
-        public int UserId { get; set; }
         public string DifficultyLevel { get; set; }
         public int TargetSpeed { get; set; }
         public int MaxTargets { get; set; }
@@ -31,7 +30,6 @@ namespace AimReactionAPI.Services
                 gameService = new GameService
                 {
                     GameId = gameConfig.GameConfigId,
-                    UserId = gameConfig.UserId,
                     DifficultyLevel = gameConfig.DifficultyLevel,
                     TargetSpeed = gameConfig.TargetSpeed,
                     MaxTargets = gameConfig.MaxTargets,
@@ -61,7 +59,6 @@ namespace AimReactionAPI.Services
                 score = new Score
                 {
                     ScoreId = ScoreId,
-                    UserId = UserId,
                     Value = 0,
                     Timestamp = DateTime.Now,
                     GameType = GameType,

@@ -1,4 +1,6 @@
-﻿using AimReactionAPI.Models;
+﻿using AimReactionAPI.Data;
+using AimReactionAPI.DTOs;
+using AimReactionAPI.Models;
 using AimReactionAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,28 +11,39 @@ namespace AimReactionAPI.Controllers
     [ApiController]
     public class GameConfigController : ControllerBase
     {
-        private readonly FileService _fileService;
+        private readonly AppDbContext _context;
         private readonly ILogger<GameConfigController> _logger;
 
-        public GameConfigController(FileService fileService, ILogger<GameConfigController> logger)
+        public GameConfigController(AppDbContext context, ILogger<GameConfigController> logger)
         {
-            _fileService = fileService;
+            _context = context;
             _logger = logger;
         }
 
         // POST api/gameconfig/upload
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadGameConfig([FromBody] GameConfig gameConfig)
+        public async Task<IActionResult> UploadGameConfig([FromBody] GameConfigDto gameConfigDto)
         {
-            if (gameConfig == null)
+            if (gameConfigDto == null)
             {
                 return BadRequest("Invalid game configuration data.");
             }
 
+            var gameConfig = new GameConfig
+            {
+                Name = gameConfigDto.Name,
+                Description = gameConfigDto.Description,
+                DifficultyLevel = gameConfigDto.DifficultyLevel,
+                TargetSpeed = gameConfigDto.TargetSpeed,
+                MaxTargets = gameConfigDto.MaxTargets,
+                GameDuration = gameConfigDto.GameDuration,
+                GameType = gameConfigDto.GameType
+            };
+
             try
             {
-                // Save the game config to the database
-                await _fileService.SaveGameConfigAsync(gameConfig);
+                _context.GameConfigs.Add(gameConfig);
+                await _context.SaveChangesAsync();
 
                 return Ok(gameConfig);
             }

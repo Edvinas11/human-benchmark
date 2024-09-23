@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AimReactionAPI.Models;
 
-namespace AimReactionAPI.Models
+namespace AimReactionAPI.DTOs
 {
-    public class GameConfig
+    public class GameConfigDto
     {
-        public int GameConfigId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string DifficultyLevel { get; set; }
