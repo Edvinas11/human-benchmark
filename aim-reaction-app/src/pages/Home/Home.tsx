@@ -6,7 +6,7 @@ import styles from './Home.module.css'
 const Home = () => {
   return (
     <section className={styles.home}>
-      <div className={styles.wrapper}>
+      <div className={"wrapper"}>
         <Hero />
         <FeaturedGames />
       </div>

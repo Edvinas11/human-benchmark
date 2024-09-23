@@ -9,7 +9,7 @@ const Navbar = () => {
     <nav className={styles.navbar}>
       <div className={styles.logo}>
         <img src={logo} alt='logo' className={styles.logoIcon}/>
-        <span>Aim Reaction</span>
+        <span>Human Benchmark</span>
       </div>
 
       <ul className={styles.navbarLinks}>
@@ -21,6 +21,9 @@ const Navbar = () => {
         </li>
         <li className={styles.navbarItem}>
           <Link to="/" className={styles.navbarLink}>Leaderboards</Link>
+        </li>
+        <li className={styles.navbarItem}>
+          <Link to="/create-game" className={styles.navbarLink}>Create Game</Link>
         </li>
 
         <Button label={"Play Now"} variant='primary'/>
