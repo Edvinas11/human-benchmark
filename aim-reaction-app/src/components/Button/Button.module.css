@@ -1,0 +1,23 @@
+.button {
+    display: flex;
+    height: 40px;
+    min-width: 84px;
+    max-width: 480px;
+    padding: 0px 16px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    border: none;
+    font-family: 'Space Grotesk';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+}
+
+.primary {
+    background-color: #21364A;
+}
+
+.secondary {
+    background-color: #0D7DF2;
+}

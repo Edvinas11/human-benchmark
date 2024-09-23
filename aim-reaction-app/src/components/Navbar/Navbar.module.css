@@ -1,0 +1,47 @@
+.navbar {
+  display: flex;
+  padding: 12px 40px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  border-bottom: 1px solid #E5E8EB;
+}
+
+.logo {
+  font-family: 'Space Grotesk';
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.logoIcon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.navbarLinks {
+  display: flex;
+  justify-content: flex-end;
+  list-style: none;
+  align-items: center;
+  gap: 32px;
+}
+
+.navbarItem {
+  margin: 0 15px;
+}
+
+.navbarLink {
+  font-family: 'Space Grotesk';
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+.navbarLink:hover {
+  color: #0D7DF2;
+}

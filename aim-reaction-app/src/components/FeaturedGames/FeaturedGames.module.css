@@ -1,0 +1,11 @@
+.games {
+    margin: 20px 0 18px 0;
+    padding: 0 16px;
+}
+
+h2 {
+  font-family: "Space Grotesk";
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+}
