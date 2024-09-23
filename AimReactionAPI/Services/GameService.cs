@@ -67,23 +67,7 @@ namespace AimReactionAPI.Services
         }
         //creating a method to create a target object is unnecessary, since Target itself
         // has a constructor.
-        public Target CreateRandomTarget(int maxX, int maxY, int size, int speed)
-        {
-            Target target = null;
-            try
-            {
-                Random random = new Random();
-                int randomX = random.Next(maxX);
-                int randomY = random.Next(maxY);
-                Coordinates randomPosition = new Coordinates(randomX, randomY);
-                target = new Target(randomPosition, size, speed);
-                return target;
-            }
-            catch (Exception e) {
-                Console.WriteLine($"Error creating target object: {e.Message}");
-            }
-            return target;
-        }
+        
 
         // save GameService in json format
         public void SaveGame(GameService gameService)
