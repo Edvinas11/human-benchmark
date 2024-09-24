@@ -1,6 +1,7 @@
 ﻿using AimReactionAPI.Models;
 using AimReactionAPI.Services;
 using System;
+using System.Collections;
 using System.Net.NetworkInformation;
 using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
@@ -22,6 +23,8 @@ namespace AimReactionAPI.Services
         public int GameDuration { get; set; }
         public GameType GameType { get; set; }
 
+        private ArrayList _gameMetadata = new ArrayList();
+
         public GameService CreateGameService(GameConfig gameConfig)
         {
             GameService gameService = null;
@@ -38,6 +41,14 @@ namespace AimReactionAPI.Services
                 };
                 //add gameService object to the list of GameServices
                 _gameServices.Add(gameService);
+
+                //boxing
+                _gameMetadata.Add((object)gameService.GameId);
+                _gameMetadata.Add((object)gameService.DifficultyLevel);
+                _gameMetadata.Add((object)gameService.TargetSpeed); 
+                _gameMetadata.Add((object)gameService.MaxTargets);  
+                _gameMetadata.Add((object)gameService.GameDuration);    
+
             }
             catch (Exception e)
             {
@@ -49,6 +60,31 @@ namespace AimReactionAPI.Services
         public List<GameService> GetAllGames()
         {
             return _gameServices;
+        }
+
+        //Unboxing
+        public void DisplayGameMetadata()
+        {
+            try
+            {
+                foreach (object data in _gameMetadata)
+                {
+                    if (data is int)
+                    {
+                        int unboxedValue = (int)data;
+                        Console.WriteLine($"Unboxed Value: {unboxedValue}");
+                    }
+                    if(data is string)
+                    {
+                        string unboxedString = (string)data;
+                        Console.WriteLine($"Unboxed string: {unboxedString}";
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error while unboxing game metadata: {e.Message}");
+            }
         }
 
         public void CreateScore()
