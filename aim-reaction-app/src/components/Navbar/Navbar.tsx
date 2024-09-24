@@ -15,10 +15,10 @@ const Navbar = () => {
 
   return (
     <nav className={styles.navbar}>
-      <div className={styles.logo}>
+      <Link to={"/"} className={styles.logo} >
         <img src={logo} alt='logo' className={styles.logoIcon} />
         <span>Human Benchmark</span>
-      </div>
+      </Link>
 
       {/* Burger Icon for Mobile */}
       <img
@@ -30,9 +30,6 @@ const Navbar = () => {
 
       {/* Navigation Links for Desktop */}
       <ul className={styles.navbarLinks}>
-        <li className={styles.navbarItem}>
-          <Link to="/" className={styles.navbarLink}>Home</Link>
-        </li>
         <li className={styles.navbarItem}>
           <Link to="/games" className={styles.navbarLink}>Games</Link>
         </li>
@@ -50,9 +47,6 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className={styles.mobileMenu}>
           <ul className={styles.mobileLinks}>
-            <li>
-              <Link to="/" onClick={toggleMenu}>Home</Link>
-            </li>
             <li>
               <Link to="/games" onClick={toggleMenu}>Games</Link>
             </li>
