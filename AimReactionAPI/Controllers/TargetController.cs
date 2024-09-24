@@ -1,5 +1,6 @@
 ﻿using AimReactionAPI.Models;
 using AimReactionAPI.Services;
+using AimReactionAPI.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,6 +53,5 @@ namespace AimReactionAPI.Controllers
                 return StatusCode(500, $"Internal server error: {e.Message}");
             }
         }
-
     }
 }
