@@ -7,9 +7,9 @@ namespace AimReactionAPI.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     
-        public DbSet<User> Users { get; set; }
-        public DbSet<GameConfig> GameConfigs { get; set; } 
-        public DbSet<Score> Scores { get; set; }
+        public DbSet<GameConfig> GameConfigs { get; set; }
+        public DbSet<Game> Games { get; set; }
+        public DbSet<Target> Targets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -17,6 +17,16 @@ namespace AimReactionAPI.Data
                         .Property(g => g.GameType)
                         .HasConversion<string>();
 
+            modelBuilder.Entity<Game>()
+                        .HasOne<GameConfig>()
+                        .WithMany()
+                        .HasForeignKey(g => g.GameConfigId);
+
+            modelBuilder.Entity<Game>()
+                        .HasMany(g => g.Targets)
+                        .WithOne()
+                        .HasForeignKey(t => t.GameId)
+                        .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

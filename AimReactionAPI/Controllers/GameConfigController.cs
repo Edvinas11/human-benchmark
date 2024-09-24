@@ -13,11 +13,13 @@ namespace AimReactionAPI.Controllers
     {
         private readonly AppDbContext _context;
         private readonly ILogger<GameConfigController> _logger;
+        private readonly GameService _gameService;
 
-        public GameConfigController(AppDbContext context, ILogger<GameConfigController> logger)
+        public GameConfigController(AppDbContext context, ILogger<GameConfigController> logger, GameService gameService)
         {
             _context = context;
             _logger = logger;
+            _gameService = gameService;
         }
 
         // POST api/gameconfig/upload
@@ -45,7 +47,14 @@ namespace AimReactionAPI.Controllers
                 _context.GameConfigs.Add(gameConfig);
                 await _context.SaveChangesAsync();
 
-                return Ok(gameConfig);
+                var game = await _gameService.CreateGameFromAsync(gameConfig);
+
+                if (game == null)
+                {
+                    return StatusCode(500, "Game creation failed.");
+                }
+
+                return Ok(game);
             }
             catch (Exception ex)
             {

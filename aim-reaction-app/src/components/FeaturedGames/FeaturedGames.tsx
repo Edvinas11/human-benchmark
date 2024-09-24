@@ -1,15 +1,58 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
 
-import styles from './FeaturedGames.module.css'
+import styles from "./FeaturedGames.module.css";
+import GameCard from "../GameCard/GameCard";
+
+import { Game } from "../../types/props";
 
 const FeaturedGames = () => {
+  const [games, setGames] = useState<Game[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await fetch("https://localhost:7028/api/Game");
+
+        if (!response.ok) {
+          throw new Error(`Network response was not ok`);
+        }
+
+        const data = await response.json();
+        setGames(data);
+      } catch (error) {
+        setError("Failed to load games.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGames();
+  }, []);
+
   return (
     <section className={styles.games}>
+      <div className={styles.available}>
         <h2>Featured Games</h2>
 
-        <p>No games for now :(</p>
+        {/* Conditionally render based on the state */}
+        {loading && <p>Loading games...</p>}
+        {error && <p>{error}</p>}
+        {!loading && !error && games.length === 0 && <p>No games for now :(</p>}
+        {!loading && !error && games.length > 0 && (
+          <div className={styles.gamesGrid}>
+            {games.map((game) => (
+              <GameCard key={game.gameId} game={game} />
+            ))}
+          </div>
+        )}
+      </div>
     </section>
-  )
-}
+  );
+};
 
-export default FeaturedGames
+export default FeaturedGames;
