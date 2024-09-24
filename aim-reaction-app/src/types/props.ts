@@ -3,3 +3,13 @@ export interface ButtonProps {
     variant: string;
     onClick?: () => void;
   }
+
+export interface Game {
+  gameId: number;
+  gameName: string;
+  gameDescription: string;
+}
+
+export interface GameCardProps {
+  game: Game;
+}

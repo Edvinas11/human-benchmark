@@ -3,6 +3,11 @@
     padding: 0 16px;
 }
 
+.gamesGrid {
+  display: flex;
+  gap: 12px;
+}
+
 h2 {
   font-family: "Space Grotesk";
   font-size: 22px;

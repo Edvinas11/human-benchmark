@@ -4,46 +4,33 @@ using AimReactionAPI.Extensions;
 using System;
 using System.Net.NetworkInformation;
 using System.Reflection.Metadata.Ecma335;
+using AimReactionAPI.Data;
 
 namespace AimReactionAPI.Services
 {
     public class TargetService
     {
-        public List<Target> _targets = new List<Target>();
-        public TargetService()
-        {
-            // dummy data
-            _targets.Add(CreateRandomTarget(100, 100, 10, 1));
-            _targets.Add(CreateRandomTarget(100, 100, 10, 1));
+        private readonly AppDbContext _context;
 
-        }
-        public List<Target> GetAllTargets()
+        public TargetService(AppDbContext context)
         {
-            return _targets;
+            _context = context;
         }
-        public void AddTarget(Target target)
+        public List<Target> GenerateTargets(int maxTargets, int targetSpeed)
         {
-            _targets.Add(target);
-        }
-        //creating a method to create a target object is unnecessary, since Target itself
-        // has a constructor.
-        public Target CreateRandomTarget(int maxX, int maxY, int size, int speed)
-        {
-            Target target = null;
-            try
+            var targets = new List<Target>();
+            for (int i = 0; i < maxTargets; i++)
             {
-                Random random = new Random();
-                int randomX = random.Next(maxX);
-                int randomY = random.Next(maxY);
-                Coordinates randomPosition = new Coordinates(randomX, randomY);
-                target = new Target(randomPosition, size, speed);
-                return target;
+                targets.Add(new Target
+                {
+                    X = new Random().Next(0, 100),
+                    Y = new Random().Next(0, 100),
+                    Size = new Random().Next(1, 10),
+                    Speed = targetSpeed
+                });
             }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Error creating target object: {e.Message}");
-            }
-            return target;
+
+            return targets;
         }
     }
 }

@@ -1,130 +1,71 @@
-﻿using AimReactionAPI.Models;
-using AimReactionAPI.Services;
+﻿using AimReactionAPI.Data;
+using AimReactionAPI.Models;
 using System;
-using System.Collections;
-using System.Net.NetworkInformation;
-using System.Reflection.Metadata.Ecma335;
+using System.Collections.Generic;
 using System.Text.Json;
-
-//From FileService.cs we get a gameConfig object. 
-// gameConfig object contains: GameConfigId, userId, DifficultyLevel, etc.
 
 namespace AimReactionAPI.Services
 {
     public class GameService
     {
-        public List<GameService> _gameServices = new List<GameService>();
-        public int GameId { get; set; }
-        public int TargetId {  get; set; }
-        public int ScoreId { get; set; }
-        public string DifficultyLevel { get; set; }
-        public int TargetSpeed { get; set; }
-        public int MaxTargets { get; set; }
-        public int GameDuration { get; set; }
-        public GameType GameType { get; set; }
+        private readonly AppDbContext _context;
+        private readonly ILogger<GameService> _logger;
+        private readonly TargetService _targetService;
 
-        private ArrayList _gameMetadata = new ArrayList();
-
-        public GameService CreateGameService(GameConfig gameConfig)
+        public GameService(AppDbContext context, ILogger<GameService> logger, TargetService targetService)
         {
-            GameService gameService = null;
+            _context = context;
+            _logger = logger;
+            _targetService = targetService;
+        }
+
+        public async Task<Game> CreateGameFromAsync(GameConfig gameConfig)
+        {
             try
             {
-                gameService = new GameService
+                var game = new Game
                 {
-                    GameId = gameConfig.GameConfigId,
+                    GameConfigId = gameConfig.GameConfigId,
+                    GameName = gameConfig.Name,
+                    GameDescription = gameConfig.Description,
                     DifficultyLevel = gameConfig.DifficultyLevel,
                     TargetSpeed = gameConfig.TargetSpeed,
                     MaxTargets = gameConfig.MaxTargets,
                     GameDuration = gameConfig.GameDuration,
-                    GameType = gameConfig.GameType
+                    GameType = gameConfig.GameType,
+                    Targets = _targetService.GenerateTargets(gameConfig.MaxTargets, gameConfig.TargetSpeed)
                 };
-                //add gameService object to the list of GameServices
-                _gameServices.Add(gameService);
 
-                //boxing
-                _gameMetadata.Add((object)gameService.GameId);
-                _gameMetadata.Add((object)gameService.DifficultyLevel);
-                _gameMetadata.Add((object)gameService.TargetSpeed); 
-                _gameMetadata.Add((object)gameService.MaxTargets);  
-                _gameMetadata.Add((object)gameService.GameDuration);    
+                _context.Games.Add(game);
+                await _context.SaveChangesAsync();
 
+                return game;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Error while creating a game: {e.Message}");
-            }
-            return gameService;
-        }
-
-        public List<GameService> GetAllGames()
-        {
-            return _gameServices;
-        }
-
-        //Unboxing
-        public void DisplayGameMetadata()
-        {
-            try
-            {
-                foreach (object data in _gameMetadata)
-                {
-                    if (data is int)
-                    {
-                        int unboxedValue = (int)data;
-                        Console.WriteLine($"Unboxed Value: {unboxedValue}");
-                    }
-                    if(data is string)
-                    {
-                        string unboxedString = (string)data;
-                        Console.WriteLine($"Unboxed string: {unboxedString}";
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Error while unboxing game metadata: {e.Message}");
+                _logger.LogError(ex, "Error while creating a game from GameConfig.");
+                return null;
             }
         }
 
-        public void CreateScore()
-        {
-            Score score = null;
-            try
-            {
-                score = new Score
-                {
-                    ScoreId = ScoreId,
-                    Value = 0,
-                    Timestamp = DateTime.Now,
-                    GameType = GameType,
-                };
-            }
-            catch (Exception e)
-            {
-               Console.WriteLine($"Error creating score object: {e.Message}");
-            }
-        }
-
-        // save GameService in json format
-        public void SaveGame(GameService gameService)
-        {
-            //probably needs to be saved to the database?
-            try
-            {
-                string json = JsonSerializer.Serialize(gameService, new JsonSerializerOptions
-                {
-                    WriteIndented = true 
-                });
-
-                Console.WriteLine("Game Service Data in JSON format:");
-                Console.WriteLine(json);
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Error while saving game data: {e.Message}");
-            }
-        }
+        //// Updated score creation with record
+        //public Score CreateScore()
+        //{
+        //    try
+        //    {
+        //        return new Score
+        //        (
+        //            ScoreId: new Random().Next(1, 1000), // Random ID generation for simplicity
+        //            Value: 0, // Initial score value
+        //            Timestamp: DateTime.Now, // Current timestamp
+        //            GameType: this.GameType // Set GameType from GameService
+        //        );
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine($"Error creating score object: {e.Message}");
+        //        return null;
+        //    }
+        //}
     }
 }

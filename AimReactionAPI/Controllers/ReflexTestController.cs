@@ -28,27 +28,27 @@ namespace AimReactionAPI.Controllers
         }
 
         
-        [HttpPost(Name = "SubmitResult")]
-        public IActionResult SubmitResult([FromBody] Score score)
-        {
-            if (score == null )
-            {
-                return BadRequest("Invalid score data.");
-            }
+        //[HttpPost(Name = "SubmitResult")]
+        //public IActionResult SubmitResult([FromBody] Score score)
+        //{
+        //    if (score == null )
+        //    {
+        //        return BadRequest("Invalid score data.");
+        //    }
 
-            try
-            {
-                score.Timestamp = DateTime.UtcNow; 
-                _context.Scores.Add(score);
-                _context.SaveChanges();
+        //    try
+        //    {
+        //        score.Timestamp = DateTime.UtcNow; 
+        //        _context.Scores.Add(score);
+        //        _context.SaveChanges();
 
-                return Ok("Score submitted successfully.");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error while submitting score data");
-                return StatusCode(500, $"Internal server error: {e.Message}");
-            }
-        }
+        //        return Ok("Score submitted successfully.");
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _logger.LogError(e, "Error while submitting score data");
+        //        return StatusCode(500, $"Internal server error: {e.Message}");
+        //    }
+        //}
     }
 }

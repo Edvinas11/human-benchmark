@@ -3,55 +3,69 @@ using AimReactionAPI.Services;
 using AimReactionAPI.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using AimReactionAPI.Data;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace AimReactionAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
     public class TargetController : ControllerBase
     {
-        private readonly TargetService _targetService;
+        private readonly AppDbContext _context;
         private readonly ILogger<TargetController> _logger;
 
-        public TargetController(TargetService targetService, ILogger<TargetController> logger)
+        public TargetController(AppDbContext context, ILogger<TargetController> logger)
         {
-            _targetService = targetService;
+            _context = context;
             _logger = logger;
         }
 
-        //GET return all targets
-        [HttpGet(Name = "GetAllTargets")]
-        public ActionResult<List<Target>> GetAllTargets()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Target>>> GetAllTargets()
         {
-            var targets = _targetService.GetAllTargets();
-            if (targets == null || targets.Count == 0)
-            {
-                return NotFound("No targets found.");
-            }
-            return Ok(targets);
+            return await _context.Targets.ToListAsync();  // Retrieve all targets
         }
 
-        //POST add target
-        [HttpPost(Name = "AddTarget")]
-        public async Task<IActionResult> AddTarget([FromBody] Target target)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Target>> GetTargetById(int id)
         {
-            if (target == null) 
+            var target = await _context.Targets.FindAsync(id);
+
+            if (target == null)
             {
-                return BadRequest("Invalid target data");
+                return NotFound("Target not found");
             }
 
-            try
+            return target;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Target>> AddTarget(Target target)
+        {
+            // Validate and add the new target
+            _context.Targets.Add(target);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetTargetById), new { id = target.TargetId }, target);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTarget(int id)
+        {
+            var target = await _context.Targets.FindAsync(id);
+
+            if (target == null)
             {
-                _targetService.AddTarget(target);
-                return Ok(target);
+                return NotFound("Target not found");
             }
-            catch (Exception e) 
-            {
-                _logger.LogError(e, "Error while saving target data");
-                return StatusCode(500, $"Internal server error: {e.Message}");
-            }
+
+            // Remove the target
+            _context.Targets.Remove(target);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
