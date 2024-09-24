@@ -16,6 +16,7 @@ namespace AimReactionAPI.Data
             modelBuilder.Entity<GameConfig>()
                         .Property(g => g.GameType)
                         .HasConversion<string>();
+
         }
     }
 }
