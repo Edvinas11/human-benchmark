@@ -8,5 +8,6 @@ namespace AimReactionAPI.Models
         public int Value { get; set; }
         public DateTime Timestamp { get; set; }
         public GameType GameType { get; set; }
+
     }
 }
