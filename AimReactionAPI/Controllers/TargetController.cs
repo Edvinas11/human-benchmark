@@ -8,7 +8,7 @@ namespace AimReactionAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
+    
     public class TargetController : ControllerBase
     {
         private readonly TargetService _targetService;
