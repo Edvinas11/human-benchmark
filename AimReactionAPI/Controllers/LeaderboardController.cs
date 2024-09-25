@@ -19,15 +19,15 @@ namespace AimReactionAPI.Controllers
             _context = context;
         }
 
-        [HttpGet("TopScores")]
-        public async Task<ActionResult<IEnumerable<Score>>> GetTopScores(int top = 10)
-        {
-            var topScores = await _context.Scores
-                .OrderByDescending(s => s.Value)  
-                .Take(top)   // limit may be changed                     
-                .ToListAsync();
+        //[HttpGet("TopScores")]
+        //public async Task<ActionResult<IEnumerable<Score>>> GetTopScores(int top = 10)
+        //{
+        //    var topScores = await _context.Scores
+        //        .OrderByDescending(s => s.Value)  
+        //        .Take(top)   // limit may be changed                     
+        //        .ToListAsync();
 
-            return Ok(topScores);
-        }
+        //    return Ok(topScores);
+        //}
     }
 }

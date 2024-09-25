@@ -31,7 +31,7 @@ namespace AimReactionAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Target>> GetTargetById(int id)
         {
-            var target = await _context.Targets.FindAsync(id);
+            Target? target = await _context.Targets.FindAsync(id);
 
             if (target == null)
             {
@@ -54,7 +54,7 @@ namespace AimReactionAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTarget(int id)
         {
-            var target = await _context.Targets.FindAsync(id);
+            Target? target = await _context.Targets.FindAsync(id);
 
             if (target == null)
             {

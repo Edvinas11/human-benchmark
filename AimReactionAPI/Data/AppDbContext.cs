@@ -10,7 +10,7 @@ namespace AimReactionAPI.Data
         public DbSet<GameConfig> GameConfigs { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Target> Targets { get; set; }
-        public DbSet<Score> Scores { get; set; }
+        //public DbSet<Score> Scores { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,14 +29,13 @@ namespace AimReactionAPI.Data
                         .HasForeignKey(t => t.GameId)
                         .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Score>().HasData(
-                new Score(1, 100, DateTime.UtcNow, GameType.MovingTargets),
-                new Score(2, 150, DateTime.UtcNow, GameType.ReflexTest),
-                new Score(3, 130, DateTime.UtcNow, GameType.CustomChallenge),
-                new Score(4, 175, DateTime.UtcNow, GameType.MovingTargets)
-            );
-
-
+            // No seed data for now
+            //modelBuilder.Entity<Score>().HasData(
+            //    new Score(1, 100, DateTime.UtcNow, GameType.MovingTargets),
+            //    new Score(2, 150, DateTime.UtcNow, GameType.ReflexTest),
+            //    new Score(3, 130, DateTime.UtcNow, GameType.CustomChallenge),
+            //    new Score(4, 175, DateTime.UtcNow, GameType.MovingTargets)
+            //);
         }
     }
 }
