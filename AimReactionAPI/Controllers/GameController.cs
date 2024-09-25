@@ -28,7 +28,7 @@ namespace AimReactionAPI.Controllers
         [HttpGet("{id}")]  
         public async Task<ActionResult<Game>> GetGameById(int id)
         {
-            var game = await _context.Games
+            Game? game = await _context.Games
                 .Include(g => g.Targets)  // Include related targets
                 .FirstOrDefaultAsync(g => g.GameId == id);
 
@@ -53,7 +53,7 @@ namespace AimReactionAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGame(int id)
         {
-            var game = await _context.Games.FindAsync(id);
+            Game? game = await _context.Games.FindAsync(id);
 
             if (game == null)
             {

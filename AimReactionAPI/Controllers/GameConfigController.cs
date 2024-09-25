@@ -31,7 +31,7 @@ namespace AimReactionAPI.Controllers
                 return BadRequest("Invalid game configuration data.");
             }
 
-            var gameConfig = new GameConfig
+            GameConfig? gameConfig = new GameConfig
             {
                 Name = gameConfigDto.Name,
                 Description = gameConfigDto.Description,
@@ -47,7 +47,7 @@ namespace AimReactionAPI.Controllers
                 _context.GameConfigs.Add(gameConfig);
                 await _context.SaveChangesAsync();
 
-                var game = await _gameService.CreateGameFromAsync(gameConfig);
+                Game? game = await _gameService.CreateGameFromAsync(gameConfig);
 
                 if (game == null)
                 {
