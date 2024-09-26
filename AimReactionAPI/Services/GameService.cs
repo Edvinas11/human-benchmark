@@ -25,7 +25,6 @@ namespace AimReactionAPI.Services
             {
                 var game = new Game
                 {
-                    GameConfigId = gameConfig.GameConfigId,
                     GameName = gameConfig.Name,
                     GameDescription = gameConfig.Description,
                     DifficultyLevel = gameConfig.DifficultyLevel,
@@ -33,7 +32,7 @@ namespace AimReactionAPI.Services
                     MaxTargets = gameConfig.MaxTargets,
                     GameDuration = gameConfig.GameDuration,
                     GameType = gameConfig.GameType,
-                    Targets = _targetService.GenerateTargets(gameConfig.MaxTargets, gameConfig.TargetSpeed)
+                    Targets = _targetService.GenerateTargets(maxTargets: gameConfig.MaxTargets, targetSpeed: gameConfig.TargetSpeed)
                 };
 
                 _context.Games.Add(game);
@@ -47,25 +46,5 @@ namespace AimReactionAPI.Services
                 return null;
             }
         }
-
-        //// Updated score creation with record
-        //public Score CreateScore()
-        //{
-        //    try
-        //    {
-        //        return new Score
-        //        (
-        //            ScoreId: new Random().Next(1, 1000), // Random ID generation for simplicity
-        //            Value: 0, // Initial score value
-        //            Timestamp: DateTime.Now, // Current timestamp
-        //            GameType: this.GameType // Set GameType from GameService
-        //        );
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine($"Error creating score object: {e.Message}");
-        //        return null;
-        //    }
-        //}
     }
 }

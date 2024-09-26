@@ -27,6 +27,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<GameService>();
 builder.Services.AddScoped<TargetService>();
+builder.Services.AddScoped<AuthService>();  
 
 var app = builder.Build();
 

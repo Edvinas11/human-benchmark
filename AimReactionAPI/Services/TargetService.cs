@@ -16,7 +16,7 @@ namespace AimReactionAPI.Services
         {
             _context = context;
         }
-        public List<Target> GenerateTargets(int maxTargets, int targetSpeed)
+        public List<Target> GenerateTargets(int maxTargets = 10, int targetSpeed = 10)
         {
             var targets = new List<Target>();
             for (int i = 0; i < maxTargets; i++)
