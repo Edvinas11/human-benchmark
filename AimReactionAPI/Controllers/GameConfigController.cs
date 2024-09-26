@@ -44,9 +44,6 @@ namespace AimReactionAPI.Controllers
 
             try
             {
-                _context.GameConfigs.Add(gameConfig);
-                await _context.SaveChangesAsync();
-
                 Game? game = await _gameService.CreateGameFromAsync(gameConfig);
 
                 if (game == null)

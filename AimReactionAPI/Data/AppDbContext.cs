@@ -7,35 +7,33 @@ namespace AimReactionAPI.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     
-        public DbSet<GameConfig> GameConfigs { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Score> Scores { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Target> Targets { get; set; }
-        //public DbSet<Score> Scores { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<GameConfig>()
-                        .Property(g => g.GameType)
-                        .HasConversion<string>();
-
-            modelBuilder.Entity<Game>()
-                        .HasOne<GameConfig>()
-                        .WithMany()
-                        .HasForeignKey(g => g.GameConfigId);
-
             modelBuilder.Entity<Game>()
                         .HasMany(g => g.Targets)
                         .WithOne()
                         .HasForeignKey(t => t.GameId)
                         .OnDelete(DeleteBehavior.Cascade);
 
-            // No seed data for now
-            //modelBuilder.Entity<Score>().HasData(
-            //    new Score(1, 100, DateTime.UtcNow, GameType.MovingTargets),
-            //    new Score(2, 150, DateTime.UtcNow, GameType.ReflexTest),
-            //    new Score(3, 130, DateTime.UtcNow, GameType.CustomChallenge),
-            //    new Score(4, 175, DateTime.UtcNow, GameType.MovingTargets)
-            //);
+            modelBuilder.Entity<Game>()
+                        .Property(g => g.GameType)
+                        .HasConversion<string>();
+
+            modelBuilder.Entity<User>()
+                        .HasMany(u => u.Scores)
+                        .WithOne(s => s.User)
+                        .HasForeignKey(u => u.UserId)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Score>()
+                        .HasOne(s => s.Game)
+                        .WithMany()
+                        .HasForeignKey(s => s.GameId);
         }
     }
 }
