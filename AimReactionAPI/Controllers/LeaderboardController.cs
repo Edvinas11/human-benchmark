@@ -19,15 +19,33 @@ namespace AimReactionAPI.Controllers
             _context = context;
         }
 
-        //[HttpGet("TopScores")]
-        //public async Task<ActionResult<IEnumerable<Score>>> GetTopScores(int top = 10)
-        //{
-        //    var topScores = await _context.Scores
-        //        .OrderByDescending(s => s.Value)  
-        //        .Take(top)   // limit may be changed                     
-        //        .ToListAsync();
+        [HttpGet("top-users/{gameType}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetTopUsersForGameType(GameType gameType)
+        {
+            
+            var topUsers = await _context.UserHighScores
+                .Where(uhs => uhs.GameType == gameType)
+                .OrderByDescending(uhs => uhs.HighScore)
+                .Take(10) // Max Users in leaderboard
+                .Select(uhs => new
+                {
+                    uhs.UserId,
+                    uhs.HighScore,
+                    User = _context.Users.FirstOrDefault(u => u.UserId == uhs.UserId) 
+                })
+                .ToListAsync();
 
-        //    return Ok(topScores);
-        //}
+            
+            var result = topUsers.Select(uhs => new 
+            {
+                UserId = uhs.UserId,
+                UserName = uhs.User?.Name, 
+                UserEmail = uhs.User?.Email,
+                HighScore = uhs.HighScore
+            });
+
+            return Ok(result);
+        }
+
     }
 }
