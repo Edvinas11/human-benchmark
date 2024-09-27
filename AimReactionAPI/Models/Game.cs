@@ -2,10 +2,9 @@
 
 namespace AimReactionAPI.Models
 {
-    public class Game
+    public class Game : IEnumerable<Target>
     {
         public int GameId { get; set; }
-        public int GameConfigId { get; set; } 
         public string GameName { get; set; }
         public string GameDescription { get; set; }
         public string DifficultyLevel { get; set; }
@@ -14,5 +13,20 @@ namespace AimReactionAPI.Models
         public int GameDuration { get; set; }
         public GameType GameType { get; set; }
         public ICollection<Target> Targets { get; set; }
+
+        public Game()
+        {
+            Targets = new List<Target>();
+        }
+
+        public IEnumerator<Target> GetEnumerator()
+        {
+            return Targets.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

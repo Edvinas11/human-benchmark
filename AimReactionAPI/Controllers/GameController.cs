@@ -18,11 +18,13 @@ namespace AimReactionAPI.Controllers
         }
 
         [HttpGet] 
-        public async Task<ActionResult<IEnumerable<Game>>> GetAllGames()
+        public async Task<ActionResult<IEnumerable<GameRecord>>> GetAllGames()
         {
-            return await _context.Games
-                .Include(g => g.Targets)  // Include related targets
+            var games = await _context.Games
+                .Select(g => new GameRecord(g.GameName, g.GameDescription))
                 .ToListAsync();
+
+            return Ok(games);
         }
 
         [HttpGet("{id}")]  
@@ -38,6 +40,26 @@ namespace AimReactionAPI.Controllers
             }
 
             return game;
+        }
+
+        [HttpGet("{id}/targets")]
+        public async Task<ActionResult<IEnumerable<Target>>> GetGameTargets(int id)
+        {
+            Game? game = await _context.Games
+                .Include(g => g.Targets)
+                .FirstOrDefaultAsync(g => g.GameId == id);
+
+            if (game == null)
+            {
+                return NotFound("Game not found");
+            }
+
+            foreach (var target in game)
+            {
+                Console.WriteLine($"Target X: {target.X}, Y: {target.Y}, Speed: {target.Speed}");
+            }
+
+            return Ok(game.Targets);
         }
 
         [HttpPost] 
@@ -66,5 +88,32 @@ namespace AimReactionAPI.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("{userId}/addscore")]
+        public async Task<IActionResult> AddScore(int userId, int value, DateTime dateAchieved, int gameId, GameType gameType)
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.UserId == userId);
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            var newScore = new Score
+            {
+                Value = value,
+                DateAchieved = dateAchieved,
+                GameId = gameId,
+                GameType = gameType,
+                UserId = userId
+            };
+
+            _context.Scores.Add(newScore);
+            await _context.SaveChangesAsync();
+
+            return Ok(newScore);
+        }
+
     }
 }
