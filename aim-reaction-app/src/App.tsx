@@ -3,6 +3,7 @@ import Home from "./pages/Home/Home"
 import './App.css';
 import Navbar from "./components/Navbar/Navbar";
 import CreateGame from "./pages/CreateGame/CreateGame";
+import Leaderboard from "./pages/Leaderboard/Leaderboard";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />}/>
         <Route path="/create-game" element={<CreateGame />}/>
+        <Route path="/leaderboards" element={<Leaderboard />}/>
       </Routes>
     </BrowserRouter>
   )
