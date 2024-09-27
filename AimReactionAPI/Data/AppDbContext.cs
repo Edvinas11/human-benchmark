@@ -11,7 +11,6 @@ namespace AimReactionAPI.Data
         public DbSet<Score> Scores { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Target> Targets { get; set; }
-        public DbSet<UserHighScore> UserHighScores { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,9 +34,7 @@ namespace AimReactionAPI.Data
                         .HasOne(s => s.Game)
                         .WithMany()
                         .HasForeignKey(s => s.GameId);
-
-            modelBuilder.Entity<UserHighScore>()
-                .HasKey(uhs => new { uhs.UserId, uhs.GameType });  
+  
         }
     }
 }

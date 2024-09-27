@@ -93,16 +93,13 @@ namespace AimReactionAPI.Controllers
         public async Task<IActionResult> AddScore(int userId, int value, DateTime dateAchieved, int gameId, GameType gameType)
         {
             var user = await _context.Users
-                .Include(u => u.UserHighScores)
                 .FirstOrDefaultAsync(u => u.UserId == userId);
 
             if (user == null)
             {
                 return NotFound("User not found");
             }
-            
 
-            // Create a new score based on the passed parameters
             var newScore = new Score
             {
                 Value = value,
@@ -112,33 +109,11 @@ namespace AimReactionAPI.Controllers
                 UserId = userId
             };
 
-            // Check for existing high score for this game type
-            var userHighScore = user.UserHighScores
-                .FirstOrDefault(hs => hs.GameType == gameType);
-
-            if (userHighScore != null)
-            {
-                // If the new score is higher, update the high score
-                if (newScore.Value > userHighScore.HighScore)
-                {
-                    userHighScore.HighScore = newScore.Value;
-                }
-            }
-            else
-            {
-                // Create a new high score if none exists
-                user.UserHighScores.Add(new UserHighScore
-                {
-                    GameType = gameType,
-                    HighScore = newScore.Value
-                });
-            }
-
-            // Add the new score
             _context.Scores.Add(newScore);
             await _context.SaveChangesAsync();
 
             return Ok(newScore);
         }
+
     }
 }

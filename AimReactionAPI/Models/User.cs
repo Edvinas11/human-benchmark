@@ -11,6 +11,5 @@ namespace AimReactionAPI.Models
         public string PasswordHash { get; set; }
 
         public ICollection<Score> Scores { get; set; } = new List<Score>();
-        public ICollection<UserHighScore> UserHighScores {get; set;} = new List<UserHighScore>();
     }
 }
