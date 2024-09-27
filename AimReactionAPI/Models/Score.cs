@@ -24,7 +24,7 @@ namespace AimReactionAPI.Models
 
         public int UserId { get; set; }
         public User User { get; set; }
-
+        public GameType GameType { get; set; }
         public int GameId { get; set; }
         public Game Game { get; set; }
     }

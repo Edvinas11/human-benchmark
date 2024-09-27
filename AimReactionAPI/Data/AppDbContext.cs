@@ -34,6 +34,7 @@ namespace AimReactionAPI.Data
                         .HasOne(s => s.Game)
                         .WithMany()
                         .HasForeignKey(s => s.GameId);
+  
         }
     }
 }

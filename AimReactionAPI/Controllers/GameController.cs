@@ -88,5 +88,32 @@ namespace AimReactionAPI.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("{userId}/addscore")]
+        public async Task<IActionResult> AddScore(int userId, int value, DateTime dateAchieved, int gameId, GameType gameType)
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.UserId == userId);
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            var newScore = new Score
+            {
+                Value = value,
+                DateAchieved = dateAchieved,
+                GameId = gameId,
+                GameType = gameType,
+                UserId = userId
+            };
+
+            _context.Scores.Add(newScore);
+            await _context.SaveChangesAsync();
+
+            return Ok(newScore);
+        }
+
     }
 }
