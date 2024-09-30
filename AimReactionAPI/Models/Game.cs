@@ -1,32 +1,31 @@
 ﻿using System.Collections;
 
-namespace AimReactionAPI.Models
+namespace AimReactionAPI.Models;
+
+public class Game : IEnumerable<Target>
 {
-    public class Game : IEnumerable<Target>
+    public int GameId { get; set; }
+    public string GameName { get; set; }
+    public string GameDescription { get; set; }
+    public string DifficultyLevel { get; set; }
+    public int TargetSpeed { get; set; }
+    public int MaxTargets { get; set; }
+    public int GameDuration { get; set; }
+    public GameType GameType { get; set; }
+    public ICollection<Target> Targets { get; set; }
+
+    public Game()
     {
-        public int GameId { get; set; }
-        public string GameName { get; set; }
-        public string GameDescription { get; set; }
-        public string DifficultyLevel { get; set; }
-        public int TargetSpeed { get; set; }
-        public int MaxTargets { get; set; }
-        public int GameDuration { get; set; }
-        public GameType GameType { get; set; }
-        public ICollection<Target> Targets { get; set; }
+        Targets = new List<Target>();
+    }
 
-        public Game()
-        {
-            Targets = new List<Target>();
-        }
+    public IEnumerator<Target> GetEnumerator()
+    {
+        return Targets.GetEnumerator();
+    }
 
-        public IEnumerator<Target> GetEnumerator()
-        {
-            return Targets.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

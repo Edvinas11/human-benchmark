@@ -1,9 +1,8 @@
-﻿namespace AimReactionAPI.Models
+﻿namespace AimReactionAPI.Models;
+
+public enum GameType
 {
-    public enum GameType
-    {
-        MovingTargets,
-        ReflexTest,
-        CustomChallenge
-    }
+    MovingTargets,
+    ReflexTest,
+    CustomChallenge
 }
