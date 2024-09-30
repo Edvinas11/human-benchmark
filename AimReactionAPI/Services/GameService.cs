@@ -4,47 +4,46 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace AimReactionAPI.Services
+namespace AimReactionAPI.Services;
+
+public class GameService
 {
-    public class GameService
+    private readonly AppDbContext _context;
+    private readonly ILogger<GameService> _logger;
+    private readonly TargetService _targetService;
+
+    public GameService(AppDbContext context, ILogger<GameService> logger, TargetService targetService)
     {
-        private readonly AppDbContext _context;
-        private readonly ILogger<GameService> _logger;
-        private readonly TargetService _targetService;
+        _context = context;
+        _logger = logger;
+        _targetService = targetService;
+    }
 
-        public GameService(AppDbContext context, ILogger<GameService> logger, TargetService targetService)
+    public async Task<Game> CreateGameFromAsync(GameConfig gameConfig)
+    {
+        try
         {
-            _context = context;
-            _logger = logger;
-            _targetService = targetService;
+            var game = new Game
+            {
+                GameName = gameConfig.Name,
+                GameDescription = gameConfig.Description,
+                DifficultyLevel = gameConfig.DifficultyLevel,
+                TargetSpeed = gameConfig.TargetSpeed,
+                MaxTargets = gameConfig.MaxTargets,
+                GameDuration = gameConfig.GameDuration,
+                GameType = gameConfig.GameType,
+                Targets = _targetService.GenerateTargets(maxTargets: gameConfig.MaxTargets, targetSpeed: gameConfig.TargetSpeed)
+            };
+
+            _context.Games.Add(game);
+            await _context.SaveChangesAsync();
+
+            return game;
         }
-
-        public async Task<Game> CreateGameFromAsync(GameConfig gameConfig)
+        catch (Exception ex)
         {
-            try
-            {
-                var game = new Game
-                {
-                    GameName = gameConfig.Name,
-                    GameDescription = gameConfig.Description,
-                    DifficultyLevel = gameConfig.DifficultyLevel,
-                    TargetSpeed = gameConfig.TargetSpeed,
-                    MaxTargets = gameConfig.MaxTargets,
-                    GameDuration = gameConfig.GameDuration,
-                    GameType = gameConfig.GameType,
-                    Targets = _targetService.GenerateTargets(maxTargets: gameConfig.MaxTargets, targetSpeed: gameConfig.TargetSpeed)
-                };
-
-                _context.Games.Add(game);
-                await _context.SaveChangesAsync();
-
-                return game;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error while creating a game from GameConfig.");
-                return null;
-            }
+            _logger.LogError(ex, "Error while creating a game from GameConfig.");
+            return null;
         }
     }
 }
