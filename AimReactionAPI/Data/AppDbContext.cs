@@ -8,6 +8,7 @@ public class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     public DbSet<User> Users { get; set; }
+    public DbSet<GameSession> GameSessions { get; set; }
     public DbSet<Score> Scores { get; set; }
     public DbSet<Game> Games { get; set; }
     public DbSet<Target> Targets { get; set; }
@@ -35,5 +36,14 @@ public class AppDbContext : DbContext
                     .WithMany()
                     .HasForeignKey(s => s.GameId);
 
+        modelBuilder.Entity<GameSession>()
+                    .HasOne(gs => gs.User)
+                    .WithMany(u => u.GameSessions)
+                    .HasForeignKey(gs => gs.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<GameSession>()
+                    .Property(gs => gs.GameType)
+                    .HasConversion<string>();
     }
 }

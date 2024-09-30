@@ -11,4 +11,5 @@ public class User
     public string PasswordHash { get; set; }
 
     public ICollection<Score> Scores { get; set; } = new List<Score>();
+    public ICollection<GameSession> GameSessions { get; set; }
 }

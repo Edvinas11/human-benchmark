@@ -20,6 +20,7 @@ public class Score
         }
     }
 
+    public int ReactionTimeInMilliseconds { get; set; }
     public DateTime DateAchieved { get; set; }
 
     public int UserId { get; set; }

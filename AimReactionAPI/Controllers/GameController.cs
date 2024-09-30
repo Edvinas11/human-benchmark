@@ -1,4 +1,5 @@
 ﻿using AimReactionAPI.Data;
+using AimReactionAPI.DTOs;
 using AimReactionAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,22 +29,32 @@ public class GameController : ControllerBase
     }
 
     [HttpGet("{id}")]  
-    public async Task<ActionResult<Game>> GetGameById(int id)
+    public async Task<ActionResult<GameDto>> GetGameById(int id)
     {
-        Game? game = await _context.Games
-            .Include(g => g.Targets)  // Include related targets
-            .FirstOrDefaultAsync(g => g.GameId == id);
-
+        Game? game = await _context.Games.FirstOrDefaultAsync(g => g.GameId == id);
+        
         if (game == null)
         {
             return NotFound("Game not found");
         }
 
+        var gameDto = new GameDto
+        {
+            GameId = game.GameId,
+            GameName = game.GameName,
+            GameDescription = game.GameDescription,
+            DifficultyLevel = game.DifficultyLevel,
+            TargetSpeed = game.TargetSpeed,
+            MaxTargets = game.MaxTargets,
+            GameDuration = game.GameDuration,
+            GameType = game.GameType
+        };
+
         object boxedGameId = game.GameId;
         int unboxedGameId = (int)boxedGameId;
         Console.WriteLine($"Boxed GameId: {boxedGameId}, Unboxed GameId: {unboxedGameId}");
 
-        return game;
+        return Ok(gameDto);
     }
 
     [HttpGet("{id}/targets")]
