@@ -1,12 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace AimReactionAPI.Models;
 
 public class Score
 {
     public int ScoreId { get; set; }
-    private int _value;
 
+    private int _value;
     public int Value
     {
         get { return _value; }
@@ -20,12 +21,16 @@ public class Score
         }
     }
 
-    public int ReactionTimeInMilliseconds { get; set; }
     public DateTime DateAchieved { get; set; }
+    public int ReactionTime { get; set; }
 
     public int UserId { get; set; }
+    [JsonIgnore]
     public User User { get; set; }
+
     public GameType GameType { get; set; }
     public int GameId { get; set; }
+
+    [JsonIgnore]
     public Game Game { get; set; }
 }

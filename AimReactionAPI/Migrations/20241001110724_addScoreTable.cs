@@ -5,24 +5,24 @@
 namespace AimReactionAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class ConfigScoreTable : Migration
+    public partial class addScoreTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "ReactionTimeInMilliseconds",
+            migrationBuilder.AddColumn<string>(
+                name: "GameType",
                 table: "Scores",
-                type: "int",
+                type: "nvarchar(max)",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: "");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "ReactionTimeInMilliseconds",
+                name: "GameType",
                 table: "Scores");
         }
     }

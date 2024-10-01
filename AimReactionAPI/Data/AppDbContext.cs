@@ -33,8 +33,19 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<Score>()
                     .HasOne(s => s.Game)
-                    .WithMany()
-                    .HasForeignKey(s => s.GameId);
+                    .WithMany(g => g.Scores)
+                    .HasForeignKey(s => s.GameId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Score>()
+                    .HasOne(s => s.User)
+                    .WithMany(u => u.Scores)
+                    .HasForeignKey(s => s.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Score>()
+                    .Property(s => s.GameType)
+                    .HasConversion<string>();
 
         modelBuilder.Entity<GameSession>()
                     .HasOne(gs => gs.User)

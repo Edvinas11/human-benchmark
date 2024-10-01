@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AimReactionAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240930164845_ConfigScoreTable")]
-    partial class ConfigScoreTable
+    [Migration("20241001110724_addScoreTable")]
+    partial class addScoreTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -105,8 +105,9 @@ namespace AimReactionAPI.Migrations
                     b.Property<int>("GameId")
                         .HasColumnType("int");
 
-                    b.Property<int>("GameType")
-                        .HasColumnType("int");
+                    b.Property<string>("GameType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ReactionTimeInMilliseconds")
                         .HasColumnType("int");

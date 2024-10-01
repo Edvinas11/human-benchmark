@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace AimReactionAPI.Models;
@@ -10,6 +11,8 @@ public class User
     public string Email { get; set; }
     public string PasswordHash { get; set; }
 
+    [JsonIgnore]
     public ICollection<Score> Scores { get; set; } = new List<Score>();
+    [JsonIgnore]
     public ICollection<GameSession> GameSessions { get; set; }
 }

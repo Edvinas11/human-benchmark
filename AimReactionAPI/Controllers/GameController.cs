@@ -77,16 +77,6 @@ public class GameController : ControllerBase
         return Ok(game.Targets);
     }
 
-    [HttpPost] 
-    public async Task<ActionResult<Game>> AddGame(Game game)
-    {
-        // Add the new game
-        _context.Games.Add(game);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetGameById), new { id = game.GameId }, game);
-    }
-
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteGame(int id)
     {

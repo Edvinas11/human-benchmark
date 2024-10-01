@@ -25,9 +25,38 @@ const ReflexTest = () => {
     }
   };
 
+  const recordReactionTime = async (
+    sessionId: number,
+    reactionTime: number
+  ) => {
+    try {
+      const response = await fetch(
+        `https://localhost:7028/api/reflextest/recordScore`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: 1, // In the future replace with actual userId
+            reactionTimeInMilliseconds: reactionTime,
+          }),
+        }
+      );
+
+      const result = await response.json();
+    } catch (error) {
+      console.error("Error recording reaction time:", error);
+    }
+  };
+
   const handleReactionTestComplete = (reactionTime: number) => {
     setReactionTime(reactionTime);
     setShowReactionTest(false);
+    
+    if (sessionId) {
+      recordReactionTime(sessionId, reactionTime);
+    }
   };
 
   return (
@@ -36,7 +65,8 @@ const ReflexTest = () => {
         <h2>Reflex Test Game</h2>
 
         {!testStarted && <StartGame startGameSession={startGameSession}/>}
-        {showReactionTest && <ReactionTest onTestComplete={handleReactionTestComplete}/>}
+        {showReactionTest && <ReactionTest onTestComplete={handleReactionTestComplete} sessionId={sessionId}/>}
+        {reactionTime && <p>Your reaction time: {reactionTime} ms</p>}
       </div>
     </section>
   )
