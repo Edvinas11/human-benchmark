@@ -43,3 +43,6 @@ Back-end:
   
 ## Use-Case Diagram
 ![image](https://github.com/user-attachments/assets/aee5af79-8ee2-471e-a13a-24ee1c472ee1)
+
+## DB Overview
+![image](https://github.com/user-attachments/assets/dfcf0d00-4ab5-42b7-b97d-0caf1f3ec614)
