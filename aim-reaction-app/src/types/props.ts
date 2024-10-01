@@ -13,3 +13,10 @@ export interface Game {
 export interface GameCardProps {
   game: Game;
 }
+
+export interface Score{
+    UserId: string;
+    UserName: string;
+    UserName: string;
+    Score: int;
+}

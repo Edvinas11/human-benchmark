@@ -2,6 +2,7 @@
 import LeaderboardText from '../../components/LeaderboardText/LeaderboardText';
 import LeaderboardTable from '../../components/LeaderboardTable/LeaderboardTable';
 
+
 const Leaderboard = () => {
     return (
       <section>
