@@ -4,5 +4,6 @@ public enum GameType
 {
     MovingTargets,
     ReflexTest,
+    ReactionTimeChallenge,
     CustomChallenge
 }
