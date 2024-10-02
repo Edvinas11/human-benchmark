@@ -11,9 +11,11 @@ const AuthForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const apiUrl = import.meta.env.VITE_API_URL;
+
     if (isLogin) {
       try {
-        const response = await fetch("https://localhost:5109/api/Auth/login", {
+        const response = await fetch(`${apiUrl}/Auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
@@ -31,7 +33,7 @@ const AuthForm: React.FC = () => {
       }
     } else {
       try {
-        const response = await fetch("https://localhost:5109/api/Auth/register", {
+        const response = await fetch(`${apiUrl}/Auth/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password, name }),

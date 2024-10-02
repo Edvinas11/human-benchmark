@@ -10,9 +10,11 @@ const ReflexTest = () => {
   const [showReactionTest, setShowReactionTest] = useState(false);
   const [testStarted, setTestStarted] = useState(false);
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const startGameSession = async (userId: number) => {
     try {
-      const response = await fetch(`https://localhost:7028/api/reflextest/start?userId=${userId}`, {
+      const response = await fetch(`${apiUrl}/reflextest/start?userId=${userId}`, {
         method: 'POST'
       });
 
