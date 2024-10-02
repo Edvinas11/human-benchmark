@@ -38,9 +38,14 @@ public class GameController : ControllerBase
             return NotFound("Game not found");
         }
 
+        object boxedGameId = game.GameId;
+        int unboxedGameId = (int)boxedGameId;
+
+        Console.WriteLine($"Boxed GameId: {boxedGameId}, Unboxed GameId: {unboxedGameId}");
+
         var gameDto = new GameDto
         {
-            GameId = game.GameId,
+            GameId = unboxedGameId,
             GameName = game.GameName,
             GameDescription = game.GameDescription,
             DifficultyLevel = game.DifficultyLevel,
@@ -49,10 +54,6 @@ public class GameController : ControllerBase
             GameDuration = game.GameDuration,
             GameType = game.GameType
         };
-
-        object boxedGameId = game.GameId;
-        int unboxedGameId = (int)boxedGameId;
-        Console.WriteLine($"Boxed GameId: {boxedGameId}, Unboxed GameId: {unboxedGameId}");
 
         return Ok(gameDto);
     }
@@ -69,7 +70,7 @@ public class GameController : ControllerBase
             return NotFound("Game not found");
         }
 
-        foreach (var target in game)
+        foreach (var target in game.Targets)
         {
             Console.WriteLine($"Target X: {target.X}, Y: {target.Y}, Speed: {target.Speed}");
         }
