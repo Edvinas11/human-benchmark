@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AuthService from "./AuthService"; 
+import Button from "../Button/Button";
 import styles from "./AuthStyles.module.css";
 
 const AuthForm: React.FC = () => {
@@ -10,19 +10,42 @@ const AuthForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (isLogin) {
-      const response = await AuthService.login({ email, password });
-      if (response) {
-        alert(`Welcome, ${response}`);
-        // redirect or update UI
+      try {
+        const response = await fetch("https://localhost:5109/api/Auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (!response.ok) throw new Error("Login failed");
+
+        const data = await response.json();
+        alert(`Welcome, ${data}`);
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error);
+          alert("Login failed: " + error.message);
+        }
       }
     } else {
-      const response = await AuthService.register({ email, password, name });
-      if (response) {
+      try {
+        const response = await fetch("https://localhost:5109/api/Auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, name }),
+        });
+
+        if (!response.ok) throw new Error("Registration failed");
+
         alert("Registration successful! Please log in.");
-        //redirect or update UI
-        setIsLogin(!isLogin); // change like this just for now
+        setIsLogin(true);
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error);
+          alert("Registration failed: " + error.message);
+        }
       }
     }
   };
@@ -30,6 +53,7 @@ const AuthForm: React.FC = () => {
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <h2>{isLogin ? "Login" : "Register"}</h2>
+
       {!isLogin && (
         <div>
           <input
@@ -41,6 +65,7 @@ const AuthForm: React.FC = () => {
           />
         </div>
       )}
+
       <div>
         <input
           type="email"
@@ -50,6 +75,7 @@ const AuthForm: React.FC = () => {
           required
         />
       </div>
+
       <div>
         <input
           type="password"
@@ -59,7 +85,12 @@ const AuthForm: React.FC = () => {
           required
         />
       </div>
-      <button type="submit">{isLogin ? "Login" : "Register"}</button>
+
+      <Button
+        label={isLogin ? "Login" : "Register"}
+        variant="secondary"
+      />
+
       <p className={styles.switchText} onClick={() => setIsLogin(!isLogin)}>
         Switch to {isLogin ? "Register" : "Login"}
       </p>

@@ -1,22 +1,7 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-
-html, body {
-    height: 100%;
-    font-family: 'Roboto', sans-serif;
-    background-color: #0e0f14;
-    color: white;
-}
-
-
 .form {
     display: flex;
     flex-direction: column;
-    max-width: 400px;
+    max-width: 370px;
     margin: 100px auto; 
     padding: 20px;
     background-color: #1a1b24;
@@ -65,25 +50,5 @@ input:focus {
     color: #0453a7; 
 }
 
-button {
-    width: 100%;
-    max-width: 400px;
-    padding: 15px;
-    margin: 10px auto;
-    border: none;
-    border-radius: 8px;
-    background-color: #0D7DF2;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    box-sizing: border-box;
-}
 
-button:hover {
-    background-color: #0453a7;
-}
 
-button:active {
-    background-color: #033972;
-}
