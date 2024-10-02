@@ -4,11 +4,15 @@ import styles from "./FeaturedGames.module.css";
 import GameCard from "../GameCard/GameCard";
 
 import { Game } from "../../types/props";
+import Button from "../Button/Button";
+import { useNavigate } from "react-router-dom";
 
 const FeaturedGames = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -50,6 +54,11 @@ const FeaturedGames = () => {
             ))}
           </div>
         )}
+      </div>
+
+      <div className="reflex">
+        <h2>Play Reflex Test</h2>
+        <Button label="Play Now" variant="primary" onClick={() => { navigate('/reflex-test') }}/>
       </div>
     </section>
   );

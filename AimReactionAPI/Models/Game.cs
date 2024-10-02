@@ -13,6 +13,7 @@ public class Game : IEnumerable<Target>
     public int GameDuration { get; set; }
     public GameType GameType { get; set; }
     public ICollection<Target> Targets { get; set; }
+    public ICollection<Score> Scores { get; set; }
 
     public Game()
     {
