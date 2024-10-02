@@ -14,13 +14,14 @@ const FeaturedGames = () => {
 
   const navigate = useNavigate();
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const fetchGames = async () => {
       try {
         setLoading(true);
         setError("");
-
-        const response = await fetch("https://localhost:7028/api/Game");
+        const response = await fetch(`${apiUrl}/Game`);
 
         if (!response.ok) {
           throw new Error(`Network response was not ok`);

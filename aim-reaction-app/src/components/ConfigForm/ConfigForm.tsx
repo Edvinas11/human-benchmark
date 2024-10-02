@@ -37,8 +37,10 @@ const ConfigForm = () => {
       gameType: gameTypeMap[type] || 2,
     };
 
+    const apiUrl = import.meta.env.VITE_API_URL;
+
     try {
-      const response = await fetch("https://localhost:7028/api/GameConfig/upload", {
+      const response = await fetch(`${apiUrl}/GameConfig/upload`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

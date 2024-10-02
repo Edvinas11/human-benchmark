@@ -9,14 +9,7 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-h2 {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 24px;
-    color: white;
-}
-
-input {
+/* input {
     width: 100%;
     max-width: 400px;
     margin: 10px auto;
@@ -35,7 +28,7 @@ input::placeholder {
 
 input:focus {
     outline: 2px solid #3b4cb8;
-}
+} */
 
 .switchText {
     margin: 20px auto;

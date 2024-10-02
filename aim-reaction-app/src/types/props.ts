@@ -7,7 +7,7 @@ export interface ButtonProps {
 export interface Game {
   gameId: number;
   gameName: string;
-  gameDescription: string;
+  gameDescr: string;
 }
 
 export interface GameCardProps {
