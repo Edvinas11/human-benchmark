@@ -70,7 +70,7 @@ public class GameController : ControllerBase
             return NotFound("Game not found");
         }
 
-        foreach (var target in game.Targets)
+        foreach (var target in game)
         {
             Console.WriteLine($"Target X: {target.X}, Y: {target.Y}, Speed: {target.Speed}");
         }
