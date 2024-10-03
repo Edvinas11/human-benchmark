@@ -18,7 +18,8 @@ const AuthForm: React.FC = () => {
         const response = await fetch(`${apiUrl}/Auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
+          
+          body: JSON.stringify({email, password}),
         });
 
         if (!response.ok) throw new Error("Login failed");
@@ -54,11 +55,11 @@ const AuthForm: React.FC = () => {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <h2>{isLogin ? "Login" : "Register"}</h2>
+      <h2 className={styles.h2}>{isLogin ? "Login" : "Register"}</h2>
 
       {!isLogin && (
         <div>
-          <input
+          <input className={styles.input}
             type="text"
             placeholder="Name"
             value={name}
@@ -68,8 +69,8 @@ const AuthForm: React.FC = () => {
         </div>
       )}
 
-      <div>
-        <input
+      <div >
+        <input className={styles.input}
           type="email"
           placeholder="Email"
           value={email}
@@ -79,7 +80,7 @@ const AuthForm: React.FC = () => {
       </div>
 
       <div>
-        <input
+        <input className={styles.input}
           type="password"
           placeholder="Password"
           value={password}
