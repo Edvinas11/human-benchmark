@@ -15,19 +15,16 @@ const AuthForm: React.FC = () => {
 
     if (isLogin) {
       try {
-        const loginDto = {email: email, password: password};
-        console.log("Sending loginDto:", loginDto);
         const response = await fetch(`${apiUrl}/Auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           
-          body: JSON.stringify(loginDto),
+          body: JSON.stringify({email, password}),
         });
 
         if (!response.ok) throw new Error("Login failed");
 
         const data = await response.json();
-        console.log("getting back:", data);
         alert(`Welcome, ${data}`);
       } catch (error) {
         if (error instanceof Error) {
