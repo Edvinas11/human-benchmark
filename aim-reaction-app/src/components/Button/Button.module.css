@@ -21,3 +21,11 @@
 .secondary {
     background-color: #0D7DF2;
 }
+
+button.secondary:hover {
+    background-color: #0453a7;
+}
+
+button.secondary:active {
+    background-color: #033972;
+}

@@ -19,10 +19,10 @@ public class GameController : ControllerBase
     }
 
     [HttpGet] 
-    public async Task<ActionResult<IEnumerable<GameRecord>>> GetAllGames()
+    public async Task<ActionResult<IEnumerable<GameDescription>>> GetAllGames()
     {
         var games = await _context.Games
-            .Select(g => new GameRecord(g.GameName, g.GameDescription))
+            .Select(g => new GameDescription(g.GameName, g.GameDescription))
             .ToListAsync();
 
         return Ok(games);
@@ -68,11 +68,6 @@ public class GameController : ControllerBase
         if (game == null)
         {
             return NotFound("Game not found");
-        }
-
-        foreach (var target in game)
-        {
-            Console.WriteLine($"Target X: {target.X}, Y: {target.Y}, Speed: {target.Speed}");
         }
 
         return Ok(game.Targets);

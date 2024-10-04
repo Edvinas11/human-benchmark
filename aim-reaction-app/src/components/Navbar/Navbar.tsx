@@ -39,6 +39,10 @@ const Navbar = () => {
         <li className={styles.navbarItem}>
           <Link to="/create-game" className={styles.navbarLink}>Create Game</Link>
         </li>
+        <li className={styles.navbarItem}>
+          <Link to="/register" className={styles.navbarLink}>Register/Login</Link>
+        </li>
+        
 
         <Button label={"Play Now"} variant='primary' />
       </ul>
@@ -56,6 +60,10 @@ const Navbar = () => {
             <li>
               <Link to="/create-game" onClick={toggleMenu}>Create Game</Link>
             </li>
+            <li>
+              <Link to="/register" onClick={toggleMenu}>Register/Login</Link>
+            </li>
+            
           </ul>
         </div>
       )}

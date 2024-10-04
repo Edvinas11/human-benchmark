@@ -61,18 +61,35 @@ public class TargetController : ControllerBase
         return CreatedAtAction(nameof(GetTargetById), new { id = target.TargetId }, target);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteTarget(int id)
+    [HttpDelete("{gameId}/targets/{id}")]
+    public async Task<IActionResult> DeleteTarget(int gameId, int id)
     {
-        Target? target = await _context.Targets.FindAsync(id);
+        var game = await _context.Games
+        .Include(g => g.Targets)
+        .FirstOrDefaultAsync(g => g.GameId == gameId);
 
-        if (target == null)
+        if (game == null)
+        {
+            return NotFound("Game not found");
+        }
+
+        Target? targetToDelete = null;
+
+        foreach (var target in game)
+        {
+            if (target.TargetId == id)
+            {
+                targetToDelete = target;
+                break;
+            }
+        }
+
+        if (targetToDelete == null)
         {
             return NotFound("Target not found");
         }
 
-        // Remove the target
-        _context.Targets.Remove(target);
+        _context.Targets.Remove(targetToDelete);
         await _context.SaveChangesAsync();
 
         return NoContent();

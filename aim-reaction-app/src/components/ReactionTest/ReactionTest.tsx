@@ -6,6 +6,8 @@ const ReactionTest: React.FC<any> = ({ onTestComplete, sessionId }) => {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [reactionTime, setReactionTime] = useState<number | null>(null);
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const randomDelay = Math.random() * 5000 + 2000; // 2-7s delay
 
@@ -30,9 +32,11 @@ const ReactionTest: React.FC<any> = ({ onTestComplete, sessionId }) => {
   };
 
   const endGameSession = async (sessionId: number) => {
+    
+
     try {
       const response = await fetch(
-        `https://localhost:7028/api/reflexTest/end/${sessionId}`,
+        `${apiUrl}/reflexTest/end/${sessionId}`,
         {
           method: "POST",
         }

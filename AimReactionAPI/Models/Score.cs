@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AimReactionAPI.Models;
 
-public class Score
+public record Score
 {
     public int ScoreId { get; set; }
 
