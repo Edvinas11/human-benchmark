@@ -1,0 +1,15 @@
+.LeaderboardTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.LeaderboardTable th,
+.LeaderboardTable td {
+    border: 1px solid #000; 
+    padding: 10px; 
+}
+
+.LeaderboardTable th {
+    background-color: #808080; 
+}

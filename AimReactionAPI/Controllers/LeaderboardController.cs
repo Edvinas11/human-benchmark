@@ -49,7 +49,7 @@ public class LeaderboardController : ControllerBase
     public async Task<ActionResult<IEnumerable<object>>> GetTopScores(int topCount)
     {
         var topScores = await _context.Scores
-            .OrderByDescending(s => s.Value) 
+            .OrderByDescending(s => s.Value)
             .Take(topCount)
             .Select(s => new
             {
@@ -59,10 +59,10 @@ public class LeaderboardController : ControllerBase
             })
             .ToListAsync();
 
-        var result = topScores.Select(s => new 
+        var result = topScores.Select(s => new
         {
             UserId = s.UserId,
-            UserName = s.User?.Name, 
+            UserName = s.User?.Name,
             UserEmail = s.User?.Email,
             Score = s.Value
         });
