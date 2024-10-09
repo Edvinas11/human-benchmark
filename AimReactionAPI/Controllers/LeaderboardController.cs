@@ -45,7 +45,30 @@ public class LeaderboardController : ControllerBase
     }
 
     // Endpoint to get top N scores
-    
+    [HttpGet("top-scores/{topCount}")]
+    public async Task<ActionResult<IEnumerable<object>>> GetTopScores(int topCount)
+    {
+        var topScores = await _context.Scores
+            .OrderByDescending(s => s.Value)
+            .Take(topCount)
+            .Select(s => new
+            {
+                s.UserId,
+                s.Value,
+                User = _context.Users.FirstOrDefault(u => u.UserId == s.UserId)
+            })
+            .ToListAsync();
+
+        var result = topScores.Select(s => new
+        {
+            UserId = s.UserId,
+            UserName = s.User?.Name,
+            UserEmail = s.User?.Email,
+            Score = s.Value
+        });
+
+        return Ok(result);
+    }
 
     [HttpGet("User-Top-Score/{userId}")]
     public async Task<ActionResult<object>> GetUserHighScore(int userId) {

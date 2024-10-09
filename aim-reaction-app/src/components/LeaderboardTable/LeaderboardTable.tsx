@@ -15,7 +15,7 @@ const LeaderboardTable = () => {
                 setLoading(true);
                 setError("");
 
-                const response = await fetch("https://localhost:7028/api/Leaderboard/all-users"); // api call to get all user scores
+                const response = await fetch(`${apiUrl}/Leaderboard/all-users`); // api call to get all user scores
 
                 console.log("Response: ", response);
 
