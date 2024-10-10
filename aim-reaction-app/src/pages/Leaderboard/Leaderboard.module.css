@@ -1,2 +1,6 @@
 ﻿.leaderboard {
+    display: grid;
+    grid-template-columns: 1fr;
+    text-align: center; 
+    margin: 25px auto; 
 }

@@ -55,6 +55,8 @@ public class LeaderboardController : ControllerBase
             {
                 s.UserId,
                 s.Value,
+                s.DateAchieved,
+                s.GameType,
                 User = _context.Users.FirstOrDefault(u => u.UserId == s.UserId)
             })
             .ToListAsync();
@@ -64,7 +66,9 @@ public class LeaderboardController : ControllerBase
             UserId = s.UserId,
             UserName = s.User?.Name,
             UserEmail = s.User?.Email,
-            Score = s.Value
+            Score = s.Value,
+            DateAchieved = s.DateAchieved,
+            GameType = s.GameType
         });
 
         return Ok(result);

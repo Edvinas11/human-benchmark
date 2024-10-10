@@ -15,8 +15,10 @@ export interface GameCardProps {
 }
 
 export interface Score{
-    score: number;
-    userEmail: string;
     userId: number;
     userName: string;
+    userEmail: string;
+    score: number;
+    dateAchieved: string;
+    gameType: string;
 }

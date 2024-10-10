@@ -15,7 +15,7 @@ const LeaderboardTable = () => {
                 setLoading(true);
                 setError("");
 
-                const response = await fetch(`${apiUrl}/Leaderboard/all-users`); // api call to get all user scores
+                const response = await fetch(`${apiUrl}/Leaderboard/top-scores/100`); // api call to get top 100 user scores
 
                 console.log("Response: ", response);
 
@@ -42,26 +42,30 @@ const LeaderboardTable = () => {
             {!loading && !error && scores.length === 0 && <p>No scores are available</p>}
             {!loading && !error && scores.length > 0 && (
                 <section>
-                    <table className={styles.LeaderboardTable}>
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>User</th>
-                                <th>Email</th>
-                                <th>Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {scores.map((score, index) => (
-                                <tr key={score.userId}> {/* Assuming Score has a unique id */}
-                                    <td>{index + 1}</td>
-                                    <td>{score.userName}</td>
-                                    <td>{score.userEmail}</td>
-                                    <td>{score.score}</td>
+                    <div className={styles.LeaderboardTableContainer}>
+                        <table className={styles.LeaderboardTable}>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>User</th>
+                                    <th>Game</th>
+                                    <th>Score</th>
+                                    <th>Date</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {scores.map((score, index) => (
+                                    <tr key={score.userId}> {/* Assuming Score has a unique id */}
+                                        <td>{index + 1}</td>
+                                        <td>{score.userName}</td>
+                                        <td>{score.gameType}</td>
+                                        <td>{score.score}</td>
+                                        <td>{new Date(score.dateAchieved).toLocaleDateString("en-CA")}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </section>
             )}
         </div>
