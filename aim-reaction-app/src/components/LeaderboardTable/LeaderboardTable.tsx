@@ -49,41 +49,47 @@ const LeaderboardTable = () => {
             {!loading && !error && scores.length === 0 && <p>No scores are available</p>}
             {!loading && !error && scores.length > 0 && (
                 <section>
-                    <div className ={styles.buttonContainer}>
-                        <Button label="Moving Targets"
-                         variant= {gameType === GameType.MovingTargets? "third" : "primary"}
-                         onClick={() => setGameType(GameType.MovingTargets)}
-                        />
-                        <Button label="Reflex Test"
-                         variant= {gameType === GameType.ReflexTest? "third" : "primary"}
-                         onClick={() => setGameType(GameType.ReflexTest)}
-                        />
-                        <Button label="Reaction Time"
-                         variant= {gameType === GameType.ReactionTimeChallenge? "third" : "primary"}
-                         onClick={() => setGameType(GameType.ReactionTimeChallenge)}
-                          />
-                    </div>
+                    <div className={styles.LeaderboardWrapper}>
+                        <div className ={styles.buttonContainer}>
+                            <Button label="Moving Targets"
+                            variant= {gameType === GameType.MovingTargets? "third" : "primary"}
+                            onClick={() => setGameType(GameType.MovingTargets)}
+                            />
+                            <Button label="Reflex Test"
+                            variant= {gameType === GameType.ReflexTest? "third" : "primary"}
+                            onClick={() => setGameType(GameType.ReflexTest)}
+                            />
+                            <Button label="Reaction Time"
+                            variant= {gameType === GameType.ReactionTimeChallenge? "third" : "primary"}
+                            onClick={() => setGameType(GameType.ReactionTimeChallenge)}
+                            />
+                        </div>
 
-                    <table className={styles.LeaderboardTable}>
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>User</th>
-                                {/* <th>Email</th> */}
-                                <th>Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {scores.map((score, index) => (
-                                <tr key={score.userId}> {/* Assuming Score has a unique id */}
-                                    <td>{index + 1}</td>
-                                    <td>{score.userName}</td>
-                                    {/* <td>{score.userEmail}</td> */}
-                                    <td>{score.score}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                        <div className={styles.LeaderboardTableContainer}>
+                            <table className={styles.LeaderboardTable}>
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>User</th>
+                                        {/* <th>Game</th> */}
+                                        <th>Score</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {scores.map((score, index) => (
+                                        <tr key={score.userId}> {/* Assuming Score has a unique id */}
+                                            <td>{index + 1}</td>
+                                            <td>{score.userName}</td>
+                                            {/* <td>{score.gameType}</td> */}
+                                            <td>{score.score}</td>
+                                            <td>{new Date(score.dateAchieved).toLocaleDateString("en-CA")}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </section>
             )}
         </div>
