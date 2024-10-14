@@ -9,25 +9,25 @@ namespace AimReactionAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ReflexTestController : ControllerBase
+public class ReactionTestController : ControllerBase
 {
     private readonly AppDbContext _context; 
-    private readonly ILogger<ReflexTestController> _logger; 
+    private readonly ILogger<ReactionTestController> _logger; 
 
-    public ReflexTestController(AppDbContext context, ILogger<ReflexTestController> logger)
+    public ReactionTestController(AppDbContext context, ILogger<ReactionTestController> logger)
     {
         _context = context;
         _logger = logger;
     }
 
     [HttpPost("start")]
-    public async Task<ActionResult<GameSession>> StartReflexTestSession(int userId)
+    public async Task<ActionResult<GameSession>> StartReactionTestSession(int userId)
     {
         var session = new GameSession
         {
             UserId = userId,
             StartTime = DateTime.UtcNow,
-            GameType = GameType.ReflexTest
+            GameType = GameType.ReactionTimeChallenge
         };
 
         _context.GameSessions.Add(session);
@@ -37,7 +37,7 @@ public class ReflexTestController : ControllerBase
     }
 
     [HttpPost("end/{sessionId}")]
-    public async Task<ActionResult<TimeSpan>> EndReflexTestSession(int sessionId)
+    public async Task<ActionResult<TimeSpan>> EndReactionTestSession(int sessionId)
     {
         var session = await _context.GameSessions.FindAsync(sessionId);
 
@@ -68,7 +68,7 @@ public class ReflexTestController : ControllerBase
         {
             UserId = user.UserId,
             GameId = 1,
-            GameType = GameType.ReflexTest,
+            GameType = GameType.ReactionTimeChallenge,
             ReactionTime = recordScoreDto.ReactionTimeInMilliseconds,
             DateAchieved = DateTime.UtcNow,
             Value = 100

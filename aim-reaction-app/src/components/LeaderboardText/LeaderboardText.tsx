@@ -5,7 +5,7 @@ const LeaderboardText = () => {
         <section>
             <div className={styles.LeaderboardText}>
             <h1>Leaderboard</h1>
-            <p>Top 100 users</p>
+            <p>Top users</p>
           </div>
         </section>
     )

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import styles from "./ConfigForm.module.css";
 import Button from "../Button/Button";
+import { GameType } from "../GameType/GameType";
 
 const ConfigForm = () => {
   const [name, setName] = useState("");
@@ -12,16 +13,13 @@ const ConfigForm = () => {
   const [speed, setSpeed] = useState("");
   const [type, setType] = useState("");
 
-  enum GameType {
-    MovingTargets = 0,
-    ReflexTest = 1,
-    CustomChallenge = 2,
-  };
 
-  const gameTypeMap: Record<string, number> = {
+
+ const gameTypeMap: Record<string, GameType> = {
     MovingTargets: GameType.MovingTargets,
     ReflexTest: GameType.ReflexTest,
     CustomChallenge: GameType.CustomChallenge,
+    ReactionTest: GameType.ReactionTimeChallenge
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -104,6 +102,7 @@ const ConfigForm = () => {
             <option value="MovingTargets">MovingTargets</option>
             <option value="ReflexTest">ReflexTest</option>
             <option value="CustomChallenge">CustomChallenge</option>
+            <option value="ReactionTest">ReactionTest</option>
           </select>
         </div>
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "../Button/Button";
 
-const ReactionTest: React.FC<any> = ({ onTestComplete, sessionId }) => {
+const ReactionTestLogic: React.FC<any> = ({ onTestComplete, sessionId }) => {
   const [waitingForClick, setWaitingForClick] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [reactionTime, setReactionTime] = useState<number | null>(null);
@@ -36,7 +36,7 @@ const ReactionTest: React.FC<any> = ({ onTestComplete, sessionId }) => {
 
     try {
       const response = await fetch(
-        `${apiUrl}/reflexTest/end/${sessionId}`,
+        `${apiUrl}/ReactionTest/end/${sessionId}`,
         {
           method: "POST",
         }
@@ -64,4 +64,4 @@ const ReactionTest: React.FC<any> = ({ onTestComplete, sessionId }) => {
   );
 };
 
-export default ReactionTest;
+export default ReactionTestLogic;

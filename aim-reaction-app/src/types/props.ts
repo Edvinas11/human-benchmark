@@ -1,3 +1,5 @@
+import { GameType } from "../components/GameType/GameType";
+
 export interface ButtonProps {
     label: string;
     variant: string;
@@ -8,6 +10,7 @@ export interface Game {
   gameId: number;
   gameName: string;
   gameDescr: string;
+  gameType: GameType;
 }
 
 export interface GameCardProps {

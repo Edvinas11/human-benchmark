@@ -46,9 +46,10 @@ public class LeaderboardController : ControllerBase
 
     // Endpoint to get top N scores
     [HttpGet("top-scores/{topCount}")]
-    public async Task<ActionResult<IEnumerable<object>>> GetTopScores(int topCount)
+    public async Task<ActionResult<IEnumerable<object>>> GetTopScores(int topCount, GameType gameType)
     {
         var topScores = await _context.Scores
+            .Where(s => s.GameType == gameType)
             .OrderByDescending(s => s.Value)
             .Take(topCount)
             .Select(s => new

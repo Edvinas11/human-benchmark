@@ -1,3 +1,8 @@
+.LeaderboardWrapper {
+    max-width: 800px;
+    margin: 25px auto;
+}
+
 .LeaderboardTableContainer {
     max-width: 800px;
     margin: 25px auto;
@@ -31,3 +36,12 @@
     padding: 12px 15px;
 }
 
+.LeaderboardTable th {
+    background-color: #808080; 
+}
+
+.buttonContainer {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
