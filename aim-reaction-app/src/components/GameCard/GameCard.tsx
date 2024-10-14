@@ -21,9 +21,9 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
         case GameType.ReflexTest:
           navigate('/reflex-test');
           break;
-        // case GameType.ReactionTimeChallenge:
-        //   navigate('reaction-time');
-        //   break;
+        case GameType.ReactionTimeChallenge:
+          navigate('reaction-test');
+          break;
         default:
           break;
       

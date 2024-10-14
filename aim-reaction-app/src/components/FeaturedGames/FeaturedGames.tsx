@@ -58,9 +58,9 @@ const FeaturedGames = () => {
         )}
       </div>
 
-      <div className="reflex">
-        <h2>Play Reflex Test</h2>
-        <Button label="Play Now" variant="primary" onClick={() => { navigate('/reflex-test') }}/>
+      <div className="Reaction">
+        <h2>Play Reaction Test</h2>
+        <Button label="Play Now" variant="primary" onClick={() => { navigate('/reaction-test') }}/>
       </div>
     </section>
   );

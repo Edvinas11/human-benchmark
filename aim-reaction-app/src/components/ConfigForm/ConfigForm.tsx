@@ -19,6 +19,7 @@ const ConfigForm = () => {
     MovingTargets: GameType.MovingTargets,
     ReflexTest: GameType.ReflexTest,
     CustomChallenge: GameType.CustomChallenge,
+    ReactionTest: GameType.ReactionTimeChallenge
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -101,6 +102,7 @@ const ConfigForm = () => {
             <option value="MovingTargets">MovingTargets</option>
             <option value="ReflexTest">ReflexTest</option>
             <option value="CustomChallenge">CustomChallenge</option>
+            <option value="ReactionTest">ReactionTest</option>
           </select>
         </div>
 
