@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
 import styles from './LeaderboardTable.module.css'
 import { Score } from '../../types/props'
+import Button from "../Button/Button";
+import { GameType } from "../GameType/GameType";
 
 const LeaderboardTable = () => {
     const [scores, setScores] = useState<Score[]>([])
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [gameType, setGameType] = useState<GameType>(GameType.MovingTargets);
 
     const apiUrl = import.meta.env.VITE_API_URL;
+
+
+    const topCount = 10;
 
     useEffect(() => {
         const fetchScores = async () => {
@@ -15,7 +21,7 @@ const LeaderboardTable = () => {
                 setLoading(true);
                 setError("");
 
-                const response = await fetch(`${apiUrl}/Leaderboard/all-users`); // api call to get all user scores
+                const response = await fetch(`${apiUrl}/Leaderboard/top-scores/${topCount}?gameType=${gameType}`); 
 
                 console.log("Response: ", response);
 
@@ -33,7 +39,8 @@ const LeaderboardTable = () => {
             }
         };
         fetchScores();
-    }, [])
+    }, [gameType])
+
 
     return (
         <div>
@@ -42,12 +49,27 @@ const LeaderboardTable = () => {
             {!loading && !error && scores.length === 0 && <p>No scores are available</p>}
             {!loading && !error && scores.length > 0 && (
                 <section>
+                    <div className ={styles.buttonContainer}>
+                        <Button label="Moving Targets"
+                         variant= {gameType === GameType.MovingTargets? "third" : "primary"}
+                         onClick={() => setGameType(GameType.MovingTargets)}
+                        />
+                        <Button label="Reflex Test"
+                         variant= {gameType === GameType.ReflexTest? "third" : "primary"}
+                         onClick={() => setGameType(GameType.ReflexTest)}
+                        />
+                        <Button label="Reaction Time"
+                         variant= {gameType === GameType.ReactionTimeChallenge? "third" : "primary"}
+                         onClick={() => setGameType(GameType.ReactionTimeChallenge)}
+                          />
+                    </div>
+
                     <table className={styles.LeaderboardTable}>
                         <thead>
                             <tr>
                                 <th>Rank</th>
                                 <th>User</th>
-                                <th>Email</th>
+                                {/* <th>Email</th> */}
                                 <th>Score</th>
                             </tr>
                         </thead>
@@ -56,7 +78,7 @@ const LeaderboardTable = () => {
                                 <tr key={score.userId}> {/* Assuming Score has a unique id */}
                                     <td>{index + 1}</td>
                                     <td>{score.userName}</td>
-                                    <td>{score.userEmail}</td>
+                                    {/* <td>{score.userEmail}</td> */}
                                     <td>{score.score}</td>
                                 </tr>
                             ))}

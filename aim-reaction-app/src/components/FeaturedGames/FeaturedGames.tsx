@@ -28,6 +28,7 @@ const FeaturedGames = () => {
         }
 
         const data = await response.json();
+        console.log(data);
         setGames(data);
       } catch (error) {
         setError("Failed to load games.");

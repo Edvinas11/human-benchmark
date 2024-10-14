@@ -13,3 +13,9 @@
 .LeaderboardTable th {
     background-color: #808080; 
 }
+
+.buttonContainer {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}

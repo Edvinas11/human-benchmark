@@ -22,7 +22,7 @@ public class GameController : ControllerBase
     public async Task<ActionResult<IEnumerable<GameDescription>>> GetAllGames()
     {
         var games = await _context.Games
-            .Select(g => new GameDescription(g.GameName, g.GameDescription))
+            .Select(g => new GameDescription(g.GameName, g.GameDescription, g.GameType))
             .ToListAsync();
 
         return Ok(games);

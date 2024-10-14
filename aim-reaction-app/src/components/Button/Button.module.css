@@ -17,6 +17,9 @@
 .primary {
     background-color: #21364A;
 }
+button.primary:hover {
+    background-color: #1f2b38;
+}
 
 .secondary {
     background-color: #0D7DF2;
@@ -29,3 +32,12 @@ button.secondary:hover {
 button.secondary:active {
     background-color: #033972;
 }
+
+.third {
+    background-color: #406277;
+}
+
+button.third:hover {
+    background-color: #4e7488;
+}
+
