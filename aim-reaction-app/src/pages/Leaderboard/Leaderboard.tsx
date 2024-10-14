@@ -6,7 +6,7 @@ import LeaderboardTable from '../../components/LeaderboardTable/LeaderboardTable
 const Leaderboard = () => {
     return (
       <section>
-         <div className ='wrapper'>
+            <div className={styles.leaderboard}>
                 <LeaderboardText />
                 <LeaderboardTable />
          </div>
