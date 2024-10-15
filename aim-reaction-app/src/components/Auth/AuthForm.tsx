@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../Button/Button";
 import styles from "./AuthStyles.module.css";
+import { useAuth } from "../../contexts/AuthContext"; // Import useAuth
 
 const AuthForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState(""); 
-  const [isLogin, setIsLogin] = useState(true); 
+  const [name, setName] = useState("");
+  const [isLogin, setIsLogin] = useState(true);
+
+  const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth(); // Use the auth context
+
+  // Check if user is already logged in by checking sessionStorage or auth state
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/"); // Redirect to home if already logged in
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -14,18 +26,24 @@ const AuthForm: React.FC = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
 
     if (isLogin) {
+      // Login logic
       try {
         const response = await fetch(`${apiUrl}/Auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          
-          body: JSON.stringify({email, password}),
+          body: JSON.stringify({ email, password }),
         });
 
         if (!response.ok) throw new Error("Login failed");
 
         const data = await response.json();
+
+        // Assuming the API returns the userId on successful login
+        login(data); // Call the login function from context
+
         alert(`Welcome, ${data}`);
+
+        navigate("/"); // Redirect to home or dashboard after login
       } catch (error) {
         if (error instanceof Error) {
           console.error(error);
@@ -33,6 +51,7 @@ const AuthForm: React.FC = () => {
         }
       }
     } else {
+      // Registration logic
       try {
         const response = await fetch(`${apiUrl}/Auth/register`, {
           method: "POST",
@@ -43,7 +62,7 @@ const AuthForm: React.FC = () => {
         if (!response.ok) throw new Error("Registration failed");
 
         alert("Registration successful! Please log in.");
-        setIsLogin(true);
+        setIsLogin(true); // Switch to login mode after successful registration
       } catch (error) {
         if (error instanceof Error) {
           console.error(error);
@@ -59,7 +78,8 @@ const AuthForm: React.FC = () => {
 
       {!isLogin && (
         <div>
-          <input className={styles.input}
+          <input
+            className={styles.input}
             type="text"
             placeholder="Name"
             value={name}
@@ -69,8 +89,9 @@ const AuthForm: React.FC = () => {
         </div>
       )}
 
-      <div >
-        <input className={styles.input}
+      <div>
+        <input
+          className={styles.input}
           type="email"
           placeholder="Email"
           value={email}
@@ -80,7 +101,8 @@ const AuthForm: React.FC = () => {
       </div>
 
       <div>
-        <input className={styles.input}
+        <input
+          className={styles.input}
           type="password"
           placeholder="Password"
           value={password}
@@ -89,10 +111,7 @@ const AuthForm: React.FC = () => {
         />
       </div>
 
-      <Button
-        label={isLogin ? "Login" : "Register"}
-        variant="secondary"
-      />
+      <Button label={isLogin ? "Login" : "Register"} variant="secondary" />
 
       <p className={styles.switchText} onClick={() => setIsLogin(!isLogin)}>
         Switch to {isLogin ? "Register" : "Login"}
