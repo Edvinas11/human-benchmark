@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../Button/Button";
 import styles from "./AuthStyles.module.css";
-import { useAuth } from "../../contexts/AuthContext"; // Import useAuth
+import { useAuth } from "../../contexts/AuthContext"; 
 
 const AuthForm: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -11,9 +11,9 @@ const AuthForm: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuth(); // Use the auth context
+  const { login, isAuthenticated } = useAuth();
 
-  // Check if user is already logged in by checking sessionStorage or auth state
+  // Redirect user if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/"); // Redirect to home if already logged in
@@ -26,7 +26,6 @@ const AuthForm: React.FC = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
 
     if (isLogin) {
-      // Login logic
       try {
         const response = await fetch(`${apiUrl}/Auth/login`, {
           method: "POST",
@@ -38,20 +37,15 @@ const AuthForm: React.FC = () => {
 
         const data = await response.json();
 
-        // Assuming the API returns the userId on successful login
-        login(data); // Call the login function from context
-
-        alert(`Welcome, ${data}`);
-
-        navigate("/"); // Redirect to home or dashboard after login
+        login(data);
+        navigate("/");
       } catch (error) {
         if (error instanceof Error) {
           console.error(error);
-          alert("Login failed: " + error.message);
+          // alert("Login failed: " + error.message);
         }
       }
     } else {
-      // Registration logic
       try {
         const response = await fetch(`${apiUrl}/Auth/register`, {
           method: "POST",
@@ -66,7 +60,7 @@ const AuthForm: React.FC = () => {
       } catch (error) {
         if (error instanceof Error) {
           console.error(error);
-          alert("Registration failed: " + error.message);
+          // alert("Registration failed: " + error.message);
         }
       }
     }
@@ -114,7 +108,7 @@ const AuthForm: React.FC = () => {
       <Button label={isLogin ? "Login" : "Register"} variant="secondary" />
 
       <p className={styles.switchText} onClick={() => setIsLogin(!isLogin)}>
-        Switch to {isLogin ? "Register" : "Login"}
+        {isLogin ? "Don't have an account? Register" : "Already have an account? Sign in"}
       </p>
     </form>
   );

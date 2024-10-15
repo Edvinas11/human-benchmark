@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -25,11 +25,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
 
+  useEffect(() => {
+    const storedUserId = sessionStorage.getItem("userId");
+    if (storedUserId) {
+      setIsAuthenticated(true);
+      setUserId(storedUserId);
+    }
+  }, []);
+
   const login = (userId: string) => {
     setIsAuthenticated(true);
     setUserId(userId);
     sessionStorage.setItem("userId", userId);
   };
+  
   const logout = () => {
     setIsAuthenticated(false);
     setUserId(null);
