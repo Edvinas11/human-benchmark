@@ -1,8 +1,9 @@
 import React from "react";
 import Button from "../Button/Button";
+import { useAuth } from "../../contexts/AuthContext";
 
 const StartGame: React.FC<any> = ({ startGameSession }) => {
-  const userId = 1;
+  const { userId } = useAuth();
 
   return (
     <>
