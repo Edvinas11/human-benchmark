@@ -66,7 +66,7 @@ public class AuthController : ControllerBase
             return Unauthorized("Invalid email or password");
         }
 
-        return Ok(user.Name);
+        return Ok(user.UserId);
     }
 
     [HttpGet("{id}")]

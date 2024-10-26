@@ -4,9 +4,7 @@
     max-width: 370px;
     margin: 100px auto; 
     padding: 20px;
-    background-color: #1a1b24;
     border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .h2 {
@@ -19,7 +17,7 @@
  .input {
     width: 100%;
     max-width: 400px;
-    margin: 10px auto;
+    margin: 10px 0;
     padding: 15px;
     background-color: #172633;
     border: 1px solid #304D69;

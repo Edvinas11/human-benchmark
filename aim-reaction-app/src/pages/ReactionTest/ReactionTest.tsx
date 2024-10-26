@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
-import styles from './ReactionTest.module.css'
-import StartGame from '../../components/StartGame/StartGame';
-import ReactionTestLogic from '../../components/ReactionTest/ReactionTestLogic';
+import styles from "./ReactionTest.module.css";
+import StartGame from "../../components/StartGame/StartGame";
+import ReactionTestLogic from "../../components/ReactionTest/ReactionTestLogic";
+import { useAuth } from "../../contexts/AuthContext";
 
 const ReactionTest = () => {
+  const { userId } = useAuth();
   const [sessionId, setSessionId] = useState(null);
   const [reactionTime, setReactionTime] = useState<number | null>(null);
   const [showReactionTest, setShowReactionTest] = useState(false);
@@ -14,16 +16,19 @@ const ReactionTest = () => {
 
   const startGameSession = async (userId: number) => {
     try {
-      const response = await fetch(`${apiUrl}/reactiontest/start?userId=${userId}`, {
-        method: 'POST'
-      });
+      const response = await fetch(
+        `${apiUrl}/reactiontest/start?userId=${userId}`,
+        {
+          method: "POST",
+        }
+      );
 
       const session = await response.json();
       setSessionId(session.gameSessionId);
       setTestStarted(true);
       setShowReactionTest(true);
     } catch (error) {
-      console.error('Error starting game session:', error);
+      console.error("Error starting game session:", error);
     }
   };
 
@@ -40,7 +45,7 @@ const ReactionTest = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            userId: 1, // In the future replace with actual userId
+            userId: userId, // In the future replace with actual userId
             reactionTimeInMilliseconds: reactionTime,
           }),
         }
@@ -55,7 +60,7 @@ const ReactionTest = () => {
   const handleReactionTestComplete = (reactionTime: number) => {
     setReactionTime(reactionTime);
     setShowReactionTest(false);
-    
+
     if (sessionId) {
       recordReactionTime(sessionId, reactionTime);
     }
@@ -66,12 +71,19 @@ const ReactionTest = () => {
       <div className={"wrapper"}>
         <h2>Reaction Test Game</h2>
 
-        {!testStarted && <StartGame startGameSession={startGameSession}/>}
-        {showReactionTest && <ReactionTestLogic onTestComplete={handleReactionTestComplete} sessionId={sessionId}/>}
+        {!testStarted && userId && (
+          <StartGame startGameSession={startGameSession} />
+        )}
+        {showReactionTest && (
+          <ReactionTestLogic
+            onTestComplete={handleReactionTestComplete}
+            sessionId={sessionId}
+          />
+        )}
         {reactionTime && <p>Your reaction time: {reactionTime} ms</p>}
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default ReactionTest
+export default ReactionTest;
