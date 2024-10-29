@@ -1,0 +1,27 @@
+.testBox {
+  width: 80%; 
+  max-width: 400px;
+  height: 30vh; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease; 
+  user-select: none;
+  margin: 0 auto; 
+  border-radius: 10px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  padding: 20px; 
+}
+
+.inactive {
+  background-color: red; 
+  color: white;
+}
+
+.active {
+  background-color: #6bff6b; 
+  color: white;
+}

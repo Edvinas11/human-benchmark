@@ -1,7 +1,8 @@
+// ReactionTestLogic.tsx
 import React, { useEffect, useState } from "react";
-import Button from "../Button/Button";
+import styles from "./ReactionTestLogic.module.css"; // Import CSS styles
 
-const ReactionTestLogic: React.FC<any> = ({ onTestComplete, sessionId }) => {
+const ReactionTestLogic: React.FC<any> = ({ onTestComplete, sessionId, goBackToStart }) => {
   const [waitingForClick, setWaitingForClick] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [reactionTime, setReactionTime] = useState<number | null>(null);
@@ -20,27 +21,24 @@ const ReactionTestLogic: React.FC<any> = ({ onTestComplete, sessionId }) => {
   }, []);
 
   const handleClick = async () => {
-    if (startTime !== null) {
+    if (!waitingForClick) {
+      goBackToStart();
+
+    } else if (startTime !== null) {
       const reactionTime = Date.now() - startTime;
       setReactionTime(reactionTime);
       setWaitingForClick(false);
 
       await endGameSession(sessionId);
-
       onTestComplete(reactionTime);
     }
   };
 
   const endGameSession = async (sessionId: number) => {
-    
-
     try {
-      const response = await fetch(
-        `${apiUrl}/ReactionTest/end/${sessionId}`,
-        {
-          method: "POST",
-        }
-      );
+      const response = await fetch(`${apiUrl}/ReactionTest/end/${sessionId}`, {
+        method: "POST",
+      });
 
       if (!response.ok) {
         throw new Error("Failed to end the session");
@@ -54,12 +52,13 @@ const ReactionTestLogic: React.FC<any> = ({ onTestComplete, sessionId }) => {
   };
 
   return (
-    <div>
-      {waitingForClick ? (
-        <Button label="Click Now!" variant="secondary" onClick={handleClick} />
-      ) : (
-        <p>Wait for it...</p>
-      )}
+    <div
+      className={`${styles.testBox} ${
+        waitingForClick ? styles.active : styles.inactive
+      }`}
+      onClick={handleClick}
+    >
+      {waitingForClick ? "Press Now!" : "Wait..."}
     </div>
   );
 };
