@@ -27,6 +27,7 @@ const ReactionTest = () => {
       setSessionId(session.gameSessionId);
       setTestStarted(true);
       setShowReactionTest(true);
+      setReactionTime(null);
     } catch (error) {
       console.error("Error starting game session:", error);
     }
@@ -57,6 +58,14 @@ const ReactionTest = () => {
     }
   };
 
+  const goBackToStart = () => {
+    setShowReactionTest(false);
+    setTestStarted(false);
+    setReactionTime(null);
+    setSessionId(null);
+  };
+
+
   const handleReactionTestComplete = (reactionTime: number) => {
     setReactionTime(reactionTime);
     setShowReactionTest(false);
@@ -66,9 +75,15 @@ const ReactionTest = () => {
     }
   };
 
+  const handleRestart = () => {
+    if (userId) {
+      startGameSession(Number(userId)); // Directly start the game session with the user ID
+    }
+  };
+
   return (
     <section className={styles.Reaction}>
-      <div className={"wrapper"}>
+      <div className={styles.wrapper}>
         <h2>Reaction Test Game</h2>
 
         {!testStarted && userId && (
@@ -78,9 +93,20 @@ const ReactionTest = () => {
           <ReactionTestLogic
             onTestComplete={handleReactionTestComplete}
             sessionId={sessionId}
+            goBackToStart={goBackToStart}
           />
         )}
-        {reactionTime && <p>Your reaction time: {reactionTime} ms</p>}
+        {reactionTime !== null && (
+          <div className={styles.resultBox} onClick={handleRestart}>
+            <div className={styles.reactionTimeText}>
+              Your reaction time: {reactionTime} ms
+            </div>
+            
+            <div className={styles.restartText}>
+              Click to restart
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
