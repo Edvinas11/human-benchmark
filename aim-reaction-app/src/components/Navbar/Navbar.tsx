@@ -13,9 +13,11 @@ const Navbar = () => {
   const navigate = useNavigate();
   
   const mobileMenuRef = useRef<HTMLDivElement | null>(null); // Reference to the mobile menu
+  const burgerIconRef = useRef<HTMLImageElement | null>(null); // Reference to the burger icon
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+      setIsMenuOpen(!isMenuOpen);
+
   };
 
   const handleLogout = () => {
@@ -26,7 +28,8 @@ const Navbar = () => {
   // Close the menu if clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node) &&
+          burgerIconRef.current && !burgerIconRef.current.contains(event.target as Node)) {
         setIsMenuOpen(false); // Close the menu when clicked outside
       }
     };
@@ -39,6 +42,21 @@ const Navbar = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [mobileMenuRef]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 1000) {
+        setIsMenuOpen(false); 
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
 
   return (
     <nav className={styles.navbar}>
@@ -53,6 +71,7 @@ const Navbar = () => {
         alt="Menu"
         className={styles.burgerIcon}
         onClick={toggleMenu}
+        ref={burgerIconRef} 
       />
 
       {/* Navigation Links for Desktop */}
