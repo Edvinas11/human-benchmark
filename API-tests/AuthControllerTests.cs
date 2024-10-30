@@ -29,7 +29,7 @@ namespace API_tests
         {
             //Use in-memory database for testing
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: "Testdb")
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 
             _context = new AppDbContext(options);
@@ -57,7 +57,7 @@ namespace API_tests
         public async Task Register_EmailAlreadyRegistered_ReturnsBadRequest()
         {
             // Arrange: Add a user with the same email to the in-memory database
-            var existingUser = new User { Email = "test@example.com" , Name = "test", PasswordHash = "hash"};
+            var existingUser = new User { Email = "test@example.com" , Name = "test", PasswordHash = _authService.HashPassword("test")};
             await _context.Users.AddAsync(existingUser);
             await _context.SaveChangesAsync();
 
@@ -80,7 +80,7 @@ namespace API_tests
             {
                 Email = "test@example.com",
                 Name = "test",
-                PasswordHash = "hash"
+                PasswordHash = _authService.HashPassword("test")
             };
             await _context.Users.AddAsync(existingUser);
             await _context.SaveChangesAsync();
@@ -98,7 +98,7 @@ namespace API_tests
         [Test]
         public async Task Register_NewUser_ReturnsUser()
         {
-            // Arrange: New user that doesn't exist yet
+            // Arrange:
             var userDto = new UserDto
             {
                 Email = "newuser@example.com",
@@ -127,6 +127,84 @@ namespace API_tests
             // Additional check: Ensure the correct routing in CreatedAtActionResult
             Assert.AreEqual("GetUserById", createdAtResult.ActionName, "Expected action name to be 'GetUserById'");
             Assert.IsTrue(createdAtResult.RouteValues.ContainsKey("id"), "Expected route values to contain 'id'");
+        }
+
+        [Test]
+        public async Task Login_InvalidEmail_ReturnsUnauthorized()
+        {
+            var existingUser = new User
+            {
+                Email = "test@example.com",
+                Name = "test",
+                PasswordHash = _authService.HashPassword("test")
+            };
+
+            await _context.Users.AddAsync(existingUser);
+            await _context.SaveChangesAsync();
+
+            var loginDto = new LoginDto
+            {
+                Email = "different@example.com",
+                Password = "test"
+            };
+
+            var result = await _controller.Login(loginDto);
+
+            Assert.IsInstanceOf<UnauthorizedObjectResult>(result.Result);
+            Assert.AreEqual("Invalid email or password", ((UnauthorizedObjectResult)result.Result).Value);
+        }
+
+        [Test]
+        public async Task Login_InvalidPassword_ReturnsUnauthorized()
+        {
+            var existingUser = new User
+            {
+                Email = "test@example.com",
+                Name = "test",
+                PasswordHash = _authService.HashPassword("test")
+            };
+
+            await _context.Users.AddAsync(existingUser);
+            await _context.SaveChangesAsync();
+
+            var loginDto = new LoginDto
+            {
+                Email = "test@example.com",
+                Password = "different"
+            };
+
+            var result = await _controller.Login(loginDto);
+            Assert.IsInstanceOf<UnauthorizedObjectResult>(result.Result);
+            Assert.AreEqual("Invalid email or password", ((UnauthorizedObjectResult)result.Result).Value);
+        }
+
+        [Test]
+        public async Task Login_ReturnsUserId()
+        {
+            var existingUser = new User
+            {
+                Email = "test@example.com",
+                Name = "test",
+                PasswordHash = _authService.HashPassword("test"),
+                UserId = 0
+            };
+
+            await _context.Users.AddAsync(existingUser);
+            await _context.SaveChangesAsync();
+
+            var loginDto = new LoginDto
+            {
+                Email = "test@example.com",
+                Password = "test"
+            };
+
+            var result = await _controller.Login(loginDto);
+
+            var okResult = result.Result as OkObjectResult;
+            Assert.IsNotNull(okResult);
+
+            Assert.IsInstanceOf<OkObjectResult>(result.Result);
+            Assert.AreEqual(existingUser.UserId, okResult.Value);
         }
     }
 }
