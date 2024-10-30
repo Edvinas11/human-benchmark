@@ -42,15 +42,13 @@ namespace API_tests
             _controller = new AuthController(_context, _authService);
         }
 
-        
         [TearDown]
         //cleanup database
         public void TearDown()
         {
             _context.Database.EnsureDeleted();
             _context.Dispose();
-        }
-           
+        }           
 
         //Test if Register returns a bad request if email already exists
         [Test]
