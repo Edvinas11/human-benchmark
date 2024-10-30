@@ -1,0 +1,20 @@
+.startBox {
+    width: 80%; 
+    max-width: 400px;
+    height: 30vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1a2c31; 
+    color: rgb(191, 188, 188);
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    user-select: none;
+    margin: 0 auto; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    padding: 20px; 
+  }
+  
