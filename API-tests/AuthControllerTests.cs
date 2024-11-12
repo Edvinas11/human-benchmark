@@ -6,11 +6,8 @@ using AimReactionAPI.Services;
 using AimReactionAPI.Controllers;
 using AimReactionAPI.DTOs;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using AimReactionAPI.Models;
-using Microsoft.Extensions.DependencyInjection;
-using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
 
 
