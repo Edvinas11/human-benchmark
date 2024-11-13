@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AimReactionAPI", "AimReactionAPI.csproj", "{8065D317-B35B-4DCB-9BD9-105B7A9D597C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API.Tests.Unit", "..\API-tests\API.Tests.Unit.csproj", "{40040AFE-A6EB-493B-BBCD-B14B75BB485A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AimReactionAPI.Tests", "..\API-tests\AimReactionAPI.Tests.csproj", "{40040AFE-A6EB-493B-BBCD-B14B75BB485A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

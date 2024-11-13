@@ -11,7 +11,7 @@ using AimReactionAPI.Models;
 using Microsoft.Extensions.Logging;
 
 
-namespace API.Tests.Unit
+namespace AimReactionAPI.Tests.Unit
 {
     [TestFixture]
     public class AuthControllerTests
@@ -33,7 +33,7 @@ namespace API.Tests.Unit
 
             _loggerMock = new Mock<ILogger<GameService>>();
 
-            _authService= new AuthService(_context, _loggerMock.Object);
+            _authService = new AuthService(_context, _loggerMock.Object);
 
             // Instantiate the controller with the mocked dependencies
             _controller = new AuthController(_context, _authService);
@@ -45,18 +45,18 @@ namespace API.Tests.Unit
         {
             _context.Database.EnsureDeleted();
             _context.Dispose();
-        }           
+        }
 
         //Test if Register returns a bad request if email already exists
         [Test]
         public async Task Register_EmailAlreadyRegistered_ReturnsBadRequest()
         {
             // Arrange: Add a user with the same email to the in-memory database
-            var existingUser = new User { Email = "test@example.com" , Name = "test", PasswordHash = _authService.HashPassword("test")};
+            var existingUser = new User { Email = "test@example.com", Name = "test", PasswordHash = _authService.HashPassword("test") };
             await _context.Users.AddAsync(existingUser);
             await _context.SaveChangesAsync();
 
-            var userDto = new UserDto { Email = "test@example.com", Name = "test"};
+            var userDto = new UserDto { Email = "test@example.com", Name = "test" };
 
             // Act: Call the Register method
             var result = await _controller.Register(userDto);
@@ -69,7 +69,7 @@ namespace API.Tests.Unit
         //Test if password is empty
         [Test]
         public async Task Register_PasswordIsNullOrEmpty_ReturnsBadRequest()
-        {   
+        {
             //Arrage
             var existingUser = new User
             {
@@ -81,7 +81,7 @@ namespace API.Tests.Unit
             await _context.SaveChangesAsync();
 
             var userDto = new UserDto { Email = "different@example.com", Name = "test", Password = "" };
-            
+
             //Act 
             var result = await _controller.Register(userDto);
 

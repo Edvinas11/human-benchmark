@@ -14,26 +14,25 @@ using Newtonsoft.Json.Linq;
 using System.Security.AccessControl;
 
 
-
-namespace API.Tests.Unit
+namespace AimReactionAPI.Tests.Unit
 {
 
-	[TestFixture]
-	public class GameControllerTests
-	{
-		private AppDbContext _context;
-		private GameController _controller;
+    [TestFixture]
+    public class GameControllerTests
+    {
+        private AppDbContext _context;
+        private GameController _controller;
         private ICollection<Target> targets;
         private ICollection<Score> scores;
-		[SetUp]
-		public void Setup()
-		{
+        [SetUp]
+        public void Setup()
+        {
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 
-			_context = new AppDbContext(options);
-			_controller = new GameController(_context);
+            _context = new AppDbContext(options);
+            _controller = new GameController(_context);
             targets = new List<Target>();
             scores = new List<Score>();
         }
@@ -43,7 +42,7 @@ namespace API.Tests.Unit
         {
             // no games in the database, should not find game with Id of 0
             var result = await _controller.GetGameById(0);
-            
+
             Assert.IsInstanceOf<ActionResult<GameDto>>(result);
             var notFoundResult = result.Result as NotFoundObjectResult;
 
@@ -126,7 +125,7 @@ namespace API.Tests.Unit
         {
             // no such userId, should be null user
             var result = await _controller.AddScore(0, 10, DateTime.Parse("11-13-2024"), 1, GameType.MovingTargets);
-            Assert.IsInstanceOf<IActionResult> (result); 
+            Assert.IsInstanceOf<IActionResult>(result);
             var notFoundResult = result as NotFoundObjectResult;
             Assert.IsNotNull(notFoundResult);
 
