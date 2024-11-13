@@ -14,7 +14,7 @@ using Newtonsoft.Json.Linq;
 using System.Security.AccessControl;
 
 
-namespace AimReactionAPI.Tests.Unit
+namespace API_tests.AimReactionAPITests.Unit
 {
 
     [TestFixture]
