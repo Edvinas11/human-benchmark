@@ -31,7 +31,7 @@ public class GameSessionHandler<TGameType> where TGameType : struct, Enum
 
         if (session == null)
         {
-            throw new InvalidOperationException("Session no found.");
+            throw new InvalidOperationException("Session not found.");
         }
 
         session.EndTime = DateTime.UtcNow;
