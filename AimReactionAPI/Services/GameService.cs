@@ -11,6 +11,13 @@ public class GameService
     private readonly AppDbContext _context;
     private readonly ILogger<GameService> _logger;
     private readonly TargetService _targetService;
+    private object value;
+
+    //added stubs in testing
+    public GameService(object value)
+    {
+        this.value = value;
+    }
 
     public GameService(AppDbContext context, ILogger<GameService> logger, TargetService targetService)
     {
@@ -19,7 +26,8 @@ public class GameService
         _targetService = targetService;
     }
 
-    public async Task<Game> CreateGameFromAsync(GameConfig gameConfig)
+    //made virtual for stubs in testing
+    public virtual async Task<Game> CreateGameFromAsync(GameConfig gameConfig)
     {
         try
         {

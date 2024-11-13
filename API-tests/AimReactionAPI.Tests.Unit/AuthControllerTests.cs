@@ -6,15 +6,12 @@ using AimReactionAPI.Services;
 using AimReactionAPI.Controllers;
 using AimReactionAPI.DTOs;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using AimReactionAPI.Models;
-using Microsoft.Extensions.DependencyInjection;
-using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
 
 
-namespace API_tests
+namespace API_tests.AimReactionAPITests.Unit
 {
     [TestFixture]
     public class AuthControllerTests
@@ -36,7 +33,7 @@ namespace API_tests
 
             _loggerMock = new Mock<ILogger<GameService>>();
 
-            _authService= new AuthService(_context, _loggerMock.Object);
+            _authService = new AuthService(_context, _loggerMock.Object);
 
             // Instantiate the controller with the mocked dependencies
             _controller = new AuthController(_context, _authService);
@@ -48,18 +45,18 @@ namespace API_tests
         {
             _context.Database.EnsureDeleted();
             _context.Dispose();
-        }           
+        }
 
         //Test if Register returns a bad request if email already exists
         [Test]
         public async Task Register_EmailAlreadyRegistered_ReturnsBadRequest()
         {
             // Arrange: Add a user with the same email to the in-memory database
-            var existingUser = new User { Email = "test@example.com" , Name = "test", PasswordHash = _authService.HashPassword("test")};
+            var existingUser = new User { Email = "test@example.com", Name = "test", PasswordHash = _authService.HashPassword("test") };
             await _context.Users.AddAsync(existingUser);
             await _context.SaveChangesAsync();
 
-            var userDto = new UserDto { Email = "test@example.com", Name = "test"};
+            var userDto = new UserDto { Email = "test@example.com", Name = "test" };
 
             // Act: Call the Register method
             var result = await _controller.Register(userDto);
@@ -72,7 +69,7 @@ namespace API_tests
         //Test if password is empty
         [Test]
         public async Task Register_PasswordIsNullOrEmpty_ReturnsBadRequest()
-        {   
+        {
             //Arrage
             var existingUser = new User
             {
@@ -84,7 +81,7 @@ namespace API_tests
             await _context.SaveChangesAsync();
 
             var userDto = new UserDto { Email = "different@example.com", Name = "test", Password = "" };
-            
+
             //Act 
             var result = await _controller.Register(userDto);
 
