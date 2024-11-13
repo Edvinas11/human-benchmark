@@ -25,7 +25,7 @@ namespace API_tests.AimReactionAPI.Test.Integration
         public void Setup()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: "TestDb")
+                .UseInMemoryDatabase(databaseName: "testDb")
                 .Options;
             _context = new AppDbContext(options);
 
@@ -106,8 +106,6 @@ namespace API_tests.AimReactionAPI.Test.Integration
 
             Assert.AreEqual(80, userHighScoreProperty.GetValue(highScore));
         }   
-
-
 
         [TearDown]
         public void TearDown()
