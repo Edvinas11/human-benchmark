@@ -11,7 +11,7 @@ using AimReactionAPI.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Validations;
 
-namespace API_tests
+namespace API.Tests.Unit
 {
     [TestFixture]
     public class GameConfigControllerTests

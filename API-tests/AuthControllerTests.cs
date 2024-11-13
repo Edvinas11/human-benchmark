@@ -11,7 +11,7 @@ using AimReactionAPI.Models;
 using Microsoft.Extensions.Logging;
 
 
-namespace API_tests
+namespace API.Tests.Unit
 {
     [TestFixture]
     public class AuthControllerTests
