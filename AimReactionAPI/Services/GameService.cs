@@ -13,6 +13,7 @@ public class GameService
     private readonly TargetService _targetService;
     private object value;
 
+    //added stubs in testing
     public GameService(object value)
     {
         this.value = value;
@@ -25,6 +26,7 @@ public class GameService
         _targetService = targetService;
     }
 
+    //made virtual for stubs in testing
     public virtual async Task<Game> CreateGameFromAsync(GameConfig gameConfig)
     {
         try
