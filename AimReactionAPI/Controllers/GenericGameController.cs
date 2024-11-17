@@ -29,4 +29,5 @@ public class GenericGameController : ControllerBase
         var duration = await _gameSessionHandler.EndSessionAsync(sessionId);
         return Ok(duration);
     }
+    // Sukurti savo generic class, arba padaryti kad priimtu generic tipa
 }
