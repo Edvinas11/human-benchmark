@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 
 import styles from "./ReactionTest.module.css";
 import StartGame from "../../components/StartGame/StartGame";
@@ -7,17 +7,24 @@ import { useAuth } from "../../contexts/AuthContext";
 
 const ReactionTest = () => {
   const { userId } = useAuth();
-  const [sessionId, setSessionId] = useState(null);
+  const [sessionId, setSessionId] = useState<number | null>(null);
   const [reactionTime, setReactionTime] = useState<number | null>(null);
   const [showReactionTest, setShowReactionTest] = useState(false);
   const [testStarted, setTestStarted] = useState(false);
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  const startGameSession = async (userId: number) => {
+  const startGameSession = async () => {
+    
+    if (!userId) {
+      console.error("User ID is required to start a game session.");
+      return;
+    }
+    console.log("UserID:",userId);
     try {
+
       const response = await fetch(
-        `${apiUrl}/reactiontest/start?userId=${userId}`,
+        `${apiUrl}/GenericGame/${userId}/start/3`, // 3 = reactiontest
         {
           method: "POST",
         }
@@ -25,9 +32,15 @@ const ReactionTest = () => {
 
       const session = await response.json();
       setSessionId(session.gameSessionId);
+      console.log("Session id: ",session.gameSessionId);
       setTestStarted(true);
       setShowReactionTest(true);
       setReactionTime(null);
+
+    // Fetch active session count
+    const activeCountResponse = await fetch(`${apiUrl}/GenericGame/active`);
+    const activeCountData = await activeCountResponse.json();
+    console.log("Active users:", activeCountData.activeSessions);
     } catch (error) {
       console.error("Error starting game session:", error);
     }
@@ -58,7 +71,26 @@ const ReactionTest = () => {
     }
   };
 
+  const fetchActiveUserCount = async () => {
+    try {
+        const response = await fetch(`${apiUrl}/GenericGame/active/count`, {
+            method: "GET",
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch active user count.");
+        }
+
+        const data = await response.json();
+        console.log("Active users: from fetch", data);
+    } catch (error) {
+        console.error("Error fetching active user count:", error);
+    }
+};
+
+
   const goBackToStart = () => {
+    endGameSession();
     setShowReactionTest(false);
     setTestStarted(false);
     setReactionTime(null);
@@ -71,15 +103,41 @@ const ReactionTest = () => {
     setShowReactionTest(false);
 
     if (sessionId) {
-      recordReactionTime(sessionId, reactionTime);
+      //recordReactionTime(sessionId, reactionTime);
+      endGameSession();
     }
   };
 
   const handleRestart = () => {
     if (userId) {
-      startGameSession(Number(userId)); // Directly start the game session with the user ID
+      startGameSession(); // Directly start the game session with the user ID
     }
   };
+
+  const endGameSession = async () => {
+    if (!sessionId) {
+      console.error("Session ID is required to end the session.");
+      return;
+    }
+    try {
+      console.log("end" ,sessionId);
+      const response = await fetch(
+        `${apiUrl}/GenericGame/end/${sessionId}`,
+        {
+          method: "POST",
+        }
+      );
+      if (response.ok) {
+        console.log("Game session ended successfully.");
+      } else {
+        console.error("Failed to end game session.");
+      }
+    } catch (error) {
+      console.error("Error ending game session:", error);
+    }
+  };
+
+
 
   return (
     <section className={styles.Reaction}>
