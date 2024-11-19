@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const FeaturedGames = () => {
   const [games, setGames] = useState<Game[]>([]);
+  const [activeUserCount, setActiveUserCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -40,10 +41,34 @@ const FeaturedGames = () => {
     fetchGames();
   }, []);
 
+  useEffect(() => {
+    const fetchActiveUserCount = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/GenericGame/active`, {
+          method: "GET",
+      });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch active user count.");
+        }
+
+        const data = await response.json();
+        setActiveUserCount(data.activeSessions);
+      } catch (error) {
+        console.error("Error fetching active user count:", error);
+      }
+    };
+
+    fetchActiveUserCount();
+  }, []);
+
   return (
     <section className={styles.games}>
       <div className={styles.available}>
-        <h2>Featured Games</h2>
+      <h2 className={styles.featuredTitle}>Featured Games</h2>
+        {activeUserCount !== null && (
+          <span className={styles.activeUsers}>Active users: {activeUserCount}</span>
+        )}
 
         {/* Conditionally render based on the state */}
         {loading && <p>Loading games...</p>}
@@ -65,5 +90,7 @@ const FeaturedGames = () => {
     </section>
   );
 };
+
+
 
 export default FeaturedGames;

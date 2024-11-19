@@ -23,20 +23,21 @@ const ReactionTestLogic: React.FC<any> = ({ onTestComplete, sessionId, goBackToS
   const handleClick = async () => {
     if (!waitingForClick) {
       goBackToStart();
-
     } else if (startTime !== null) {
       const reactionTime = Date.now() - startTime;
       setReactionTime(reactionTime);
       setWaitingForClick(false);
 
-      await endGameSession(sessionId);
-      onTestComplete(reactionTime);
+      if (sessionId) {
+          await endGameSession(sessionId);
+          onTestComplete(reactionTime);
+      }
     }
   };
 
   const endGameSession = async (sessionId: number) => {
     try {
-      const response = await fetch(`${apiUrl}/ReactionTest/end/${sessionId}`, {
+      const response = await fetch(`${apiUrl}/GenericGame/end/${sessionId}`, {
         method: "POST",
       });
 

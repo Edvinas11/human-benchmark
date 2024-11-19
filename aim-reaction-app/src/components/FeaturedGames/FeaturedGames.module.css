@@ -14,3 +14,22 @@ h2 {
   font-style: normal;
   font-weight: 700;
 }
+
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+}
+
+.featuredTitle {
+  font-size: 2rem; 
+  font-weight: bold;
+  margin: 0;
+}
+
+.activeUsers {
+  font-size: 1rem;
+  color: gray; 
+  font-style: italic; 
+}

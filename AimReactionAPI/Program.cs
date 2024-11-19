@@ -34,6 +34,8 @@ builder.Services.AddScoped<TargetService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped(typeof(GameSessionHandler<>));
 
+
+
 var app = builder.Build();
 
 app.UseCors("AllowSpecificOrigin");
