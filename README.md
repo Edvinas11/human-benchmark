@@ -17,6 +17,24 @@ Back-end:
 - Entity Framework Core
 - PostgreSQL
 
+## Deployment on Local Machines
+Checkout the Github Repository
+Setup PostgreSQL in Docker using:
+```
+docker run -itd -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 --name postgresql postgres
+```
+Then run the following commands
+Using .NET 8 SKD:
+```
+cd AimReactionAPI
+dotnet run
+```
+or using Docker Compose
+```
+cd AimReactionAPI
+docker-compose up --build
+```
+
 ## Project Structure
 ### Main Components
 - ```User```
