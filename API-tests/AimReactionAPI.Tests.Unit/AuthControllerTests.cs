@@ -1,3 +1,4 @@
+
 using System.Runtime.CompilerServices;
 using NUnit;
 using Moq;
@@ -20,6 +21,7 @@ namespace API_tests.AimReactionAPITests.Unit
         private AuthService _authService;
         private AuthController _controller;
         private Mock<ILogger<GameService>> _loggerMock;
+        private ILogger<AuthController> _logger;
 
         [SetUp]
         public void Setup()
@@ -31,12 +33,14 @@ namespace API_tests.AimReactionAPITests.Unit
 
             _context = new AppDbContext(options);
 
+            _logger = new LoggerFactory().CreateLogger<AuthController>();
+
             _loggerMock = new Mock<ILogger<GameService>>();
 
             _authService = new AuthService(_context, _loggerMock.Object);
 
             // Instantiate the controller with the mocked dependencies
-            _controller = new AuthController(_context, _authService);
+            _controller = new AuthController(_context, _authService, _logger);
         }
 
         [TearDown]
@@ -63,7 +67,7 @@ namespace API_tests.AimReactionAPITests.Unit
 
             // Assert: Ensure the response is a BadRequest
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
-            Assert.AreEqual("Email is already registered", ((BadRequestObjectResult)result.Result).Value);
+            Assert.AreEqual("Email is already registered.", ((BadRequestObjectResult)result.Result).Value);
         }
 
         //Test if password is empty

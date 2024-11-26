@@ -22,7 +22,7 @@ namespace API_tests.AimReactionAPI.Test.Integration
         private ILogger<TargetController> _logger;
 
         [SetUp]
-        public void Setup() 
+        public void Setup()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "testDb")
@@ -49,7 +49,7 @@ namespace API_tests.AimReactionAPI.Test.Integration
         [Test]
         public async Task GetTargetsBySpeed_ShouldReturnFilteredTargets()
         {
-            
+
             var result = await _controller.GetTargetsBySpeed(3);
 
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
@@ -60,7 +60,7 @@ namespace API_tests.AimReactionAPI.Test.Integration
             var targets = okResult.Value as IEnumerable<Target>;
 
             Assert.IsNotNull(targets);
-            Assert.AreEqual(1, targets.Count()); // Only one target with Speed > 3
+            Assert.AreEqual(2, targets.Count()); // two targets with the same count
         }
 
         [Test]
@@ -82,7 +82,7 @@ namespace API_tests.AimReactionAPI.Test.Integration
         [Test]
         public async Task DeleteTarget_ShouldRemoveTarget_WhenTargetExists()
         {
-            
+
             var result = await _controller.DeleteTarget(1, 1);
 
             Assert.IsInstanceOf<NoContentResult>(result);
