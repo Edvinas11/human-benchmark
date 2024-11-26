@@ -1,6 +1,0 @@
-@AimReactionAPI_HostAddress = http://localhost:5109
-
-GET {{AimReactionAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
