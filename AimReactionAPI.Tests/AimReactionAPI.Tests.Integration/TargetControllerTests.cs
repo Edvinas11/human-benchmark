@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
-namespace API_tests.AimReactionAPI.Test.Integration
+namespace AimReactionAPI.Tests.Integration
 {
     [TestFixture]
     public class TargetControllerTests

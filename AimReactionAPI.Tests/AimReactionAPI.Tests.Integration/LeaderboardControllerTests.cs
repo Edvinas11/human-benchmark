@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 
 
-namespace API_tests.AimReactionAPI.Test.Integration
+namespace AimReactionAPI.Tests.Integration
 {
     
     [TestFixture]

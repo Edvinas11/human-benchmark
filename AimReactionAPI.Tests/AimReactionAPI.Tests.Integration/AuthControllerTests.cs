@@ -1,4 +1,3 @@
-
 using System.Runtime.CompilerServices;
 using NUnit;
 using Moq;
@@ -12,8 +11,9 @@ using AimReactionAPI.Models;
 using Microsoft.Extensions.Logging;
 
 
-namespace API_tests.AimReactionAPITests.Unit
+namespace AimReactionAPI.Tests.Integration
 {
+
     [TestFixture]
     public class AuthControllerTests
     {
