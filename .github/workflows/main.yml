@@ -21,13 +21,23 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Restore dependencies
+        run: |
+          dotnet restore ./AimReactionAPI
+          dotnet restore ./API.Tests/AimReactionAPI.Test.Integration
+          dotnet restore ./API.Tests/AimReactionAPI.Test.Unit
+
       - name: Build
         run: |
           dotnet build ./AimReactionAPI --configuration Release --no-restore
+          dotnet build ./API.Tests/AimReactionAPI.Test.Integration --configuration Release --no-restore
+          dotnet build ./API.Tests/AimReactionAPI.Test.Unit --configuration Release --no-restore
 
       - name: Test
         run: |
-          dotnet test ./AimReactionAPI.Tests --configuration Release --no-build
+          rm -rf ./AimReactionAPI/Migrations
+          dotnet test ./API.Tests/AimReactionAPI.Test.Integration --configuration Release --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./lcov.info
+          dotnet test ./API.Tests/AimReactionAPI.Test.Unit --configuration Release --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./lcov.info
 
       - name: Publish
         run: |
