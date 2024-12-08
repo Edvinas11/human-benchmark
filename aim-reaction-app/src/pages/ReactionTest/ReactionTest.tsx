@@ -24,7 +24,7 @@ const ReactionTest = () => {
     try {
 
       const response = await fetch(
-        `${apiUrl}/GenericGame/${userId}/start/3`, // 3 = reactiontest
+        `${apiUrl}/GenericGame/${userId}/start/2`, // 2 = reactiontest
         {
           method: "POST",
         }

@@ -18,15 +18,20 @@ public class GameController : ControllerBase
         _context = context;
     }
 
-    [HttpGet] 
-    public async Task<ActionResult<IEnumerable<GameDescription>>> GetAllGames()
-    {
-        var games = await _context.Games
-            .Select(g => new GameDescription(g.GameName, g.GameDescription, g.GameType))
-            .ToListAsync();
+[HttpGet]
+public async Task<ActionResult> GetAllGames()
+{
+    var games = await _context.Games
+        .Select(g => new
+        {
+            GameDescription = new GameDescription(g.GameName, g.GameDescription, g.GameType),
+            GameDifficulty = g.DifficultyLevel
+        })
+        .ToListAsync();
 
-        return Ok(games);
-    }
+    return Ok(games);
+}
+
 
     [HttpGet("{id}")]  
     public async Task<ActionResult<GameDto>> GetGameById(int id)

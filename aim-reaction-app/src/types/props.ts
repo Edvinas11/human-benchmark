@@ -8,9 +8,8 @@ export interface ButtonProps {
 
 export interface Game {
   gameId: number;
-  gameName: string;
-  gameDescr: string;
-  gameType: GameType;
+  gameDescription: GameDescription;
+  gameDifficulty: string;
 }
 
 export interface GameCardProps {
@@ -24,4 +23,10 @@ export interface Score{
     score: number;
     dateAchieved: string;
     gameType: string;
+}
+
+export interface GameDescription {
+  gameName: string;
+  gameDescr: string;
+  gameType: GameType;
 }
