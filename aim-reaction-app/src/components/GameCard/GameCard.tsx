@@ -14,12 +14,12 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
 
   const handleNavigate = () => {
     console.log("Game object:", game); // Debugging line
-    switch (game.gameType) {
+    switch (game.gameDescription.gameType) {
         case GameType.MovingTargets:
           navigate('/movingTargets');
           break;
         case GameType.ReflexTest:
-          navigate('/reflex-test');
+          navigate('/reflex-test', { state: { difficulty: game.gameDifficulty } });
           break;
         case GameType.ReactionTimeChallenge:
           navigate('reaction-test');
@@ -33,12 +33,13 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
   return (
     <div className={styles.card}>
       <img src={GameImage}
-         alt={game.gameName}
+         alt={game.gameDescription.gameName}
          className={styles.image}
          onClick = {handleNavigate }
           />
-      <h3>{game.gameName}</h3>
-      <p>{game.gameDescr}</p>
+      <h3>{game.gameDescription.gameName}</h3>
+      <div>{game.gameDescription.gameDescr}</div>
+      <div>{game.gameDifficulty}</div>
     </div>
   );
 };

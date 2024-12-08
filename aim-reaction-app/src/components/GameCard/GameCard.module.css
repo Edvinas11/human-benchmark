@@ -12,16 +12,15 @@
   border-radius: 4px;
   margin-bottom: 12px;
 }
-
 h3 {
   margin: 0;
   font-family: "Space Grotesk";
-  font-size: 16px;
+  font-size: 24px;
   font-style: normal;
   font-weight: 500;
 }
 
-p {
+div {
   font-family: "Space Grotesk";
   font-size: 14px;
   font-style: normal;

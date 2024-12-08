@@ -20,6 +20,7 @@ public class GameSessionHandler<TGameType> where TGameType : struct, Enum
             UserId = userId,
             StartTime = DateTime.UtcNow,
             GameType = (GameType)(object)gameType,
+            
         };
 
         _context.GameSessions.Add(session);
