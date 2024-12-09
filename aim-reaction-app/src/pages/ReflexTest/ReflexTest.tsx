@@ -148,6 +148,9 @@ const ReflexTest: React.FC = () => {
   const handleStopGame = () => {
     setGameActive(false);
     setTarget(null);
+    if (sessionId != null) {
+      endGameSession(sessionId);
+   }
 
     if (expiryTimeout) {
       clearTimeout(expiryTimeout);
