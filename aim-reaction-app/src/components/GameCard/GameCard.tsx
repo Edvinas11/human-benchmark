@@ -1,4 +1,4 @@
-import React from "react";
+ import React from "react";
 
 import styles from "./GameCard.module.css";
 
@@ -19,7 +19,7 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
           navigate('/movingTargets');
           break;
         case GameType.ReflexTest:
-          navigate('/reflex-test', { state: { difficulty: game.gameDifficulty } });
+          navigate('/reflex-test');
           break;
         case GameType.ReactionTimeChallenge:
           navigate('reaction-test');
@@ -33,13 +33,12 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
   return (
     <div className={styles.card}>
       <img src={GameImage}
-         alt={game.gameDescription.gameName}
+         alt={game.gameDescription.gameName || "No name"}
          className={styles.image}
          onClick = {handleNavigate }
           />
-      <h3>{game.gameDescription.gameName}</h3>
-      <div>{game.gameDescription.gameDescr}</div>
-      <div>{game.gameDifficulty}</div>
+      <h3>{game.gameDescription.gameName || "No name"}</h3>
+      <div>{game.gameDescription.gameDescr || "No description"}</div>
     </div>
   );
 };

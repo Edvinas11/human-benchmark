@@ -29,8 +29,17 @@ const FeaturedGames = () => {
         }
 
         const data = await response.json();
-        console.log(data);
-        setGames(data);
+          const transformedData = data.map((g: any) => ({
+              gameDescription: {
+                  gameName: g.gameName,
+                  gameDescr: g.gameDescr,
+                  gameType: g.gameType,
+              },
+              gameDifficulty: g.gameDifficulty,
+          }));
+
+        console.log(transformedData);
+        setGames(transformedData);
       } catch (error) {
         setError("Failed to load games.");
       } finally {
