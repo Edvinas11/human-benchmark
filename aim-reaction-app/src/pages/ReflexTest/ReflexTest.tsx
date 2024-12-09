@@ -3,6 +3,8 @@ import styles from "./ReflexTest.module.css";
 import { useAuth } from "../../contexts/AuthContext";
 import { useLocation } from "react-router-dom";
 import hitSound from "../../assets/Target-sound.mp3";
+import countSound from "../../assets/CountDown.mp3";
+import gameSound from "../../assets/GameStart-Sound.mp3";
 
 const DIFFICULTY_SETTINGS = {
   easy: { spawnInterval: 1200, expiryTime: 1200 },
@@ -121,10 +123,16 @@ const ReflexTest: React.FC = () => {
     setTarget(null);
     setCountdown(3);
 
-      let countdownValue = 3;
+      let countdownValue = 4;
       const countdownInterval = setInterval(() => {
+          if (countdownValue > 1) {
+              const countdownSound = new Audio(countSound);
+              countdownSound.play();
+          }
           countdownValue -= 1;
           if (countdownValue === 0) {
+              const startSound = new Audio(gameSound);
+              startSound.play();
               setCountdown("Go!"); // Show "Go!" for 1 second
               setTimeout(() => {
                   setCountdown(null); // Clear countdown
@@ -135,7 +143,6 @@ const ReflexTest: React.FC = () => {
               setCountdown(countdownValue);
           }
       }, 1000);
-
     };
 
   const handleStopGame = () => {
@@ -157,9 +164,9 @@ const ReflexTest: React.FC = () => {
                 <button onClick={handleStartGame}>Start Game</button>
             </div>
         ) : (
-            <div>
-                <p className={styles.score}>Score: {score}</p>
-                <p className = {styles.missedTargets}>Missed Targets: {missedTargets} / 3</p>
+            <div className={styles.scoreRow}>
+                <span className={styles.score}> Score: {score} </span>
+                <span className = {styles.missedTargets}>Missed Targets: {missedTargets} / 3</span>
                 <button onClick={handleStopGame}>Stop Game</button>
             </div>
         )}

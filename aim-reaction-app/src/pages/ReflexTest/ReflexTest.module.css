@@ -42,7 +42,30 @@ button:hover {
     background: linear-gradient(135deg, #3cd123, #25a217); 
     transform: translateY(-3px); 
 }
+.scoreRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    padding: 0 20px; 
+    margin-bottom: 10px;
+}
 
+.scoreRow span,
+.scoreRow button {
+    font-size: 1rem;
+}
+
+.scoreRow .score {
+    flex-grow: 0.2; 
+}
+
+.scoreRow .missedTargets {
+    text-align: center; 
+}
+
+.scoreRow button {
+    margin-right: 100px;
+}
 .score {
     font-size: 24px;
     margin: 10px 0;
