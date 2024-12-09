@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./ReflexTest.module.css";
 import { useAuth } from "../../contexts/AuthContext";
 import { useLocation } from "react-router-dom";
+import hitSound from "../../assets/Target-sound.mp3";
 
 const DIFFICULTY_SETTINGS = {
   easy: { spawnInterval: 1200, expiryTime: 1200 },
@@ -100,14 +101,17 @@ const ReflexTest: React.FC = () => {
     }
   };
 
-  const handleHitTarget = () => {
-    setScore((prev) => prev + 1);
-    setTarget(null);
+    const handleHitTarget = () => {
+     const targetHit = new Audio(hitSound);
+     targetHit.play();
+    
+     setScore((prev) => prev + 1);
+     setTarget(null);
 
-    if (expiryTimeout) {
-      clearTimeout(expiryTimeout);
-      setExpiryTimeout(null);
-    }
+     if (expiryTimeout) {
+       clearTimeout(expiryTimeout);
+       setExpiryTimeout(null);
+     }
   };
 
   const handleStartGame = () => {

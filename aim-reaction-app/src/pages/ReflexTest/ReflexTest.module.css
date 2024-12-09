@@ -1,9 +1,9 @@
 .container {
     text-align: center;
     margin: 20px auto;
-  }
-  
-  .targetArea {
+}
+
+.targetArea {
     position: relative;
     width: 80%;
     height: 400px;
@@ -11,9 +11,38 @@
     border: 2px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
-    background-color: #f0f0f0;
-  }
-  
+    background: linear-gradient(135deg, #415ea0, #0b2d49); /* Gradient background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+button {
+    background: linear-gradient(135deg, #2596be, #0c4764); /* Gradient for buttons */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, transform 0.2s ease-in-out;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #3cd123, #25a217); 
+    transform: translateY(-3px); 
+}
+
+.score {
+    font-size: 24px;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.missedTargets {
+    font-size: 18px;
+    color: red;
+}
+
   .target {
     position: absolute;
     width: 50px;
