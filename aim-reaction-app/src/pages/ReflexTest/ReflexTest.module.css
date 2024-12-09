@@ -15,6 +15,17 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+.countdown {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    font-weight: bold;
+    color: red;
+    z-index: 10;
+}
+
 button {
     background: linear-gradient(135deg, #2596be, #0c4764); /* Gradient for buttons */
     color: white;
@@ -43,11 +54,11 @@ button:hover {
     color: red;
 }
 
-  .target {
+.target {
     position: absolute;
     width: 50px;
     height: 50px;
-    background-color: red;
+    background: radial-gradient(circle, #e28743, #eab676);
     border-radius: 50%;
     cursor: pointer;
     display: flex;
@@ -57,7 +68,13 @@ button:hover {
     font-weight: bold;
     color: white;
     animation: fadeInOut 2s linear;
-  }
+    box-shadow: 0 0 5px #e28743;
+    transition: transform 0.2s ease-in-out;
+}
+
+.target:hover {
+    transform: scale(1.05); 
+}
   
   @keyframes fadeInOut {
     0%, 80% {

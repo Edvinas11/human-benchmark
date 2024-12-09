@@ -18,6 +18,7 @@ const ReflexTest: React.FC = () => {
   const [gameActive, setGameActive] = useState(false);
   const [sessionId, setSessionId] = useState<number | null>(null);
   const [expiryTimeout, setExpiryTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [countdown, setCountdown] = useState<number | null>(null);
 
   const location = useLocation();
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("easy");
@@ -111,15 +112,31 @@ const ReflexTest: React.FC = () => {
      if (expiryTimeout) {
        clearTimeout(expiryTimeout);
        setExpiryTimeout(null);
-     }
-  };
+    }
+    };
 
   const handleStartGame = () => {
     setScore(0);
     setMissedTargets(0);
-    setGameActive(true);
     setTarget(null);
-  };
+    setCountdown(3);
+
+      let countdownValue = 3;
+      const countdownInterval = setInterval(() => {
+          countdownValue -= 1;
+          if (countdownValue === 0) {
+              setCountdown("Go!"); // Show "Go!" for 1 second
+              setTimeout(() => {
+                  setCountdown(null); // Clear countdown
+                  setGameActive(true); // Start the game
+              }, 1000);
+              clearInterval(countdownInterval);
+          } else {
+              setCountdown(countdownValue);
+          }
+      }, 1000);
+
+    };
 
   const handleStopGame = () => {
     setGameActive(false);
@@ -131,34 +148,38 @@ const ReflexTest: React.FC = () => {
     }
   };
 
-  return (
+    return (
     <div className={styles.container}>
-      <h2>Reflex Test</h2>
+        <h2>Reflex Test</h2>
 
-      {!gameActive ? (
-        <div>
-          <button onClick={handleStartGame}>Start Game</button>
-        </div>
-      ) : (
-        <div>
-          <p>Score: {score}</p>
-          <p>Missed Targets: {missedTargets} / 3</p>
-          <button onClick={handleStopGame}>Stop Game</button>
-        </div>
-      )}
-
-      <div className={styles.targetArea}>
-        {target !== null && (
-          <div
-            className={styles.target}
-            style={{
-              top: `${Math.random() * 80}%`,
-              left: `${Math.random() * 80}%`,
-            }}
-            onClick={handleHitTarget}
-          />
+        {!gameActive && countdown === null ? (
+            <div>
+                <button onClick={handleStartGame}>Start Game</button>
+            </div>
+        ) : (
+            <div>
+                <p className={styles.score}>Score: {score}</p>
+                <p className = {styles.missedTargets}>Missed Targets: {missedTargets} / 3</p>
+                <button onClick={handleStopGame}>Stop Game</button>
+            </div>
         )}
-      </div>
+
+        <div className={styles.targetArea}>
+            {countdown !== null && (
+                <div className={styles.countdown}>{countdown}</div>
+            )}
+
+            {target !== null && (
+                <div
+                    className={styles.target}
+                    style={{
+                        top: `${Math.random() * 80}%`,
+                        left: `${Math.random() * 80}%`,
+                    }}
+                    onClick={handleHitTarget}
+                />
+            )}
+        </div>
     </div>
   );
 };
