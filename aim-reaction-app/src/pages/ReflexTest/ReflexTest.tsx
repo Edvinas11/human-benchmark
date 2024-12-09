@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import styles from "./ReflexTest.module.css";
 import { useAuth } from "../../contexts/AuthContext";
 import { useLocation } from "react-router-dom";
+import hitSound from "../../assets/Target-sound.mp3";
+import countSound from "../../assets/CountDown.mp3";
+import gameSound from "../../assets/GameStart-Sound.mp3";
 
 const DIFFICULTY_SETTINGS = {
   easy: { spawnInterval: 1200, expiryTime: 1200 },
@@ -17,6 +20,7 @@ const ReflexTest: React.FC = () => {
   const [gameActive, setGameActive] = useState(false);
   const [sessionId, setSessionId] = useState<number | null>(null);
   const [expiryTimeout, setExpiryTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [countdown, setCountdown] = useState<number | null>(null);
 
   const location = useLocation();
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("easy");
@@ -100,22 +104,46 @@ const ReflexTest: React.FC = () => {
     }
   };
 
-  const handleHitTarget = () => {
-    setScore((prev) => prev + 1);
-    setTarget(null);
+    const handleHitTarget = () => {
+     const targetHit = new Audio(hitSound);
+     targetHit.play();
+    
+     setScore((prev) => prev + 1);
+     setTarget(null);
 
-    if (expiryTimeout) {
-      clearTimeout(expiryTimeout);
-      setExpiryTimeout(null);
+     if (expiryTimeout) {
+       clearTimeout(expiryTimeout);
+       setExpiryTimeout(null);
     }
-  };
+    };
 
   const handleStartGame = () => {
     setScore(0);
     setMissedTargets(0);
-    setGameActive(true);
     setTarget(null);
-  };
+    setCountdown(3);
+
+      let countdownValue = 4;
+      const countdownInterval = setInterval(() => {
+          if (countdownValue > 1) {
+              const countdownSound = new Audio(countSound);
+              countdownSound.play();
+          }
+          countdownValue -= 1;
+          if (countdownValue === 0) {
+              const startSound = new Audio(gameSound);
+              startSound.play();
+              setCountdown("Go!"); // Show "Go!" for 1 second
+              setTimeout(() => {
+                  setCountdown(null); // Clear countdown
+                  setGameActive(true); // Start the game
+              }, 1000);
+              clearInterval(countdownInterval);
+          } else {
+              setCountdown(countdownValue);
+          }
+      }, 1000);
+    };
 
   const handleStopGame = () => {
     setGameActive(false);
@@ -127,34 +155,38 @@ const ReflexTest: React.FC = () => {
     }
   };
 
-  return (
+    return (
     <div className={styles.container}>
-      <h2>Reflex Test</h2>
+        <h2>Reflex Test</h2>
 
-      {!gameActive ? (
-        <div>
-          <button onClick={handleStartGame}>Start Game</button>
-        </div>
-      ) : (
-        <div>
-          <p>Score: {score}</p>
-          <p>Missed Targets: {missedTargets} / 3</p>
-          <button onClick={handleStopGame}>Stop Game</button>
-        </div>
-      )}
-
-      <div className={styles.targetArea}>
-        {target !== null && (
-          <div
-            className={styles.target}
-            style={{
-              top: `${Math.random() * 80}%`,
-              left: `${Math.random() * 80}%`,
-            }}
-            onClick={handleHitTarget}
-          />
+        {!gameActive && countdown === null ? (
+            <div>
+                <button onClick={handleStartGame}>Start Game</button>
+            </div>
+        ) : (
+            <div className={styles.scoreRow}>
+                <span className={styles.score}> Score: {score} </span>
+                <span className = {styles.missedTargets}>Missed Targets: {missedTargets} / 3</span>
+                <button onClick={handleStopGame}>Stop Game</button>
+            </div>
         )}
-      </div>
+
+        <div className={styles.targetArea}>
+            {countdown !== null && (
+                <div className={styles.countdown}>{countdown}</div>
+            )}
+
+            {target !== null && (
+                <div
+                    className={styles.target}
+                    style={{
+                        top: `${Math.random() * 80}%`,
+                        left: `${Math.random() * 80}%`,
+                    }}
+                    onClick={handleHitTarget}
+                />
+            )}
+        </div>
     </div>
   );
 };

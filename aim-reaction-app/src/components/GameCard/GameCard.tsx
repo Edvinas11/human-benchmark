@@ -1,4 +1,4 @@
-import React from "react";
+ import React from "react";
 
 import styles from "./GameCard.module.css";
 
@@ -39,7 +39,6 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
           />
       <h3>{game.gameDescription.gameName}</h3>
       <div>{game.gameDescription.gameDescr}</div>
-      <div>{game.gameDifficulty}</div>
     </div>
   );
 };
