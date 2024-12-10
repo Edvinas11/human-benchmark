@@ -22,7 +22,7 @@ const FeaturedGames = () => {
       try {
         setLoading(true);
         setError("");
-        const response = await fetch(`${apiUrl}/Game`);
+        const response = await fetch(`${apiUrl}/GenericGame/games`);
 
         if (!response.ok) {
           throw new Error(`Network response was not ok`);

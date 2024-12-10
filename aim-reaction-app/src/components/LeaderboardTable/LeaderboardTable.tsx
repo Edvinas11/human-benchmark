@@ -46,8 +46,8 @@ const LeaderboardTable = () => {
         <div>
             {loading && <p>Loading scores...</p>}
             {error && <p>{error}</p>}
-            {!loading && !error && scores.length === 0 && <p>No scores are available</p>}
-            {!loading && !error && scores.length > 0 && (
+            {!loading && !error && <p>No scores are available</p>}
+            {!loading && !error && (
                 <section>
                     <div className={styles.LeaderboardWrapper}>
                         <div className ={styles.buttonContainer}>

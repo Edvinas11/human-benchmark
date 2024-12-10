@@ -57,7 +57,7 @@ namespace AimReactionAPI.Migrations
 
                     b.HasKey("GameId");
 
-                    b.ToTable("Games");
+                    b.ToTable("Games", (string)null);
                 });
 
             modelBuilder.Entity("AimReactionAPI.Models.GameSession", b =>
@@ -85,7 +85,7 @@ namespace AimReactionAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("GameSessions");
+                    b.ToTable("GameSessions", (string)null);
                 });
 
             modelBuilder.Entity("AimReactionAPI.Models.Score", b =>
@@ -121,7 +121,7 @@ namespace AimReactionAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Scores");
+                    b.ToTable("Scores", (string)null);
                 });
 
             modelBuilder.Entity("AimReactionAPI.Models.Target", b =>
@@ -151,7 +151,7 @@ namespace AimReactionAPI.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("Targets");
+                    b.ToTable("Targets", (string)null);
                 });
 
             modelBuilder.Entity("AimReactionAPI.Models.User", b =>
@@ -176,7 +176,7 @@ namespace AimReactionAPI.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("AimReactionAPI.Models.GameSession", b =>
