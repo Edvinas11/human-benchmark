@@ -24,6 +24,8 @@ jobs:
       - name: Restore dependencies
         run: |
           dotnet restore ./AimReactionAPI
+          dotnet restore ./AimReactionAPI.Tests/AimReactionAPI.Tests.Integration
+          dotnet restore ./AimReactionAPI.Tests/AimReactionAPI.Tests.Unit
 
       - name: Build
         run: |
