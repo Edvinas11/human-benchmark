@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using AimReactionAPI.Models;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AimReactionAPI.Tests.Integration
 {
@@ -30,9 +31,19 @@ namespace AimReactionAPI.Tests.Integration
 
             SeedDatabase();
 
-            _gameSessionHandler = new GameSessionHandler<GameType>(_context);
-            _controller = new GenericGameController(_gameSessionHandler);
+            var mockScopeFactory = new Mock<IServiceScopeFactory>();
+            var mockScope = new Mock<IServiceScope>();
+            var mockServiceProvider = new Mock<IServiceProvider>();
+
+            mockScopeFactory.Setup(x => x.CreateScope()).Returns(mockScope.Object);
+            mockScope.Setup(x => x.ServiceProvider).Returns(mockServiceProvider.Object);
+            mockServiceProvider.Setup(x => x.GetService(typeof(AppDbContext))).Returns(_context);
+
+            _gameSessionHandler = new GameSessionHandler<GameType>(_context, mockScopeFactory.Object);
+            _controller = new GenericGameController(_gameSessionHandler, _context);
         }
+
+
 
         [Test]
         public async Task StartGameSession_ShouldReturnSession()
