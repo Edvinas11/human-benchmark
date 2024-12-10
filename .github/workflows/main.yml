@@ -24,12 +24,20 @@ jobs:
       - name: Restore dependencies
         run: |
           dotnet restore ./AimReactionAPI
-          dotnet restore ./AimReactionAPI.Tests/AimReactionAPI.Tests.Integration
           dotnet restore ./AimReactionAPI.Tests/AimReactionAPI.Tests.Unit
+          dotnet restore ./AimReactionAPI.Tests/AimReactionAPI.Tests.Integration
 
       - name: Build
         run: |
           dotnet build ./AimReactionAPI --configuration Release --no-restore
+          dotnet build ./AimReactionAPI.Tests/AimReactionAPI.Tests.Unit --configuration Release --no-restore
+          dotnet build ./AimReactionAPI.Tests/AimReactionAPI.Tests.Integration --configuration Release --no-restore
+
+      - name: Test
+        run: |
+          rm -rf ./AimReactionAPI/Migrations
+          dotnet test ./AimReactionAPI.Tests/AimReactionAPI.Tests.Unit --configuration Release --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./lcov.info
+          dotnet test ./AimReactionAPI.Tests/AimReactionAPI.Tests.Integration --configuration Release --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./lcov.info
           
       - name: Publish
         run: |
