@@ -61,7 +61,9 @@ const ReflexTest: React.FC = () => {
         if (expiryTimeout) clearTimeout(expiryTimeout);
       };
     } else if (missedTargets >= 3) {
-      handleStopGame(); // Stop the game when 3 targets are missed
+      if (gameActive) {
+        handleStopGame();
+      }
     }
   }, [gameActive, target, difficulty, missedTargets]);
 
@@ -145,16 +147,48 @@ const ReflexTest: React.FC = () => {
       }, 1000);
     };
 
-  const handleStopGame = () => {
+  const handleStopGame = async () =>  { 
     setGameActive(false);
     setTarget(null);
-    if (sessionId != null) {
-      endGameSession(sessionId);
-   }
 
     if (expiryTimeout) {
       clearTimeout(expiryTimeout);
       setExpiryTimeout(null);
+    }
+
+    const scoreData = {
+      userId: userId, 
+      value: score, 
+      dateAchieved: new Date().toISOString(),
+      gameId: 1,
+      gameType: 1, 
+    };
+  
+    try {
+      await saveScore(scoreData);
+    } catch (error) {
+      console.error("Error saving score:", error);
+    }
+  };
+
+  const saveScore = async (score: any) => {
+    try {
+      const response = await fetch(`https://localhost:8080/api/Game/${score.userId}/addscore?value=${score.value}&dateAchieved=${score.dateAchieved}&gameId=${score.gameId}&gameType=${score.gameType}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(score),  
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error saving score: ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+      console.log('Score saved:', data);
+    } catch (error) {
+      console.error('Error saving score:', error);
     }
   };
 
@@ -195,3 +229,4 @@ const ReflexTest: React.FC = () => {
 };
 
 export default ReflexTest;
+
