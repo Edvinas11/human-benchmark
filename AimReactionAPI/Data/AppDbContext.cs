@@ -16,6 +16,9 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Game>()
+                    .HasKey(g => g.GameId);
+
+        modelBuilder.Entity<Game>()
                     .HasMany(g => g.Targets)
                     .WithOne()
                     .HasForeignKey(t => t.GameId)

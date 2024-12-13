@@ -106,8 +106,9 @@ public class GenericGameController : ControllerBase
     }
 
     [HttpPost("{userId}/addscore")]
-    public async Task<IActionResult> AddScore(int userId, int value, DateTime dateAchieved, int gameId, GameType gameType)
+    public async Task<IActionResult> AddScore([FromRoute] int userId, [FromBody] AddScoreDto scoreDto)
     {
+        Console.WriteLine($"Received gameId: {scoreDto.GameId}, userId: {userId}");;
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.UserId == userId);
 
@@ -116,12 +117,20 @@ public class GenericGameController : ControllerBase
             return NotFound("User not found");
         }
 
+        var game = await _context.Games.FirstOrDefaultAsync(g => g.GameId == scoreDto.GameId);
+        if (game == null) 
+        {   
+            return NotFound("Game not found");
+        }
+
+        _context.Attach(game);
+
         var newScore = new Score
         {
-            Value = value,
-            DateAchieved = dateAchieved,
-            GameId = gameId,
-            GameType = gameType,
+            Value = scoreDto.Value,
+            DateAchieved = scoreDto.DateAchieved,
+            GameId = scoreDto.GameId,
+            GameType = scoreDto.GameType,
             UserId = userId
         };
 

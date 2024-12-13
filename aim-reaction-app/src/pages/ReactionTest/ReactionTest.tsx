@@ -10,6 +10,7 @@ const ReactionTest: React.FC = () => {
   const [reactionTime, setReactionTime] = useState<number | null>(null);
   const [showReactionTest, setShowReactionTest] = useState(false);
   const [testStarted, setTestStarted] = useState(false);
+  const sanitizedUserId = userId ? parseInt(userId, 10) : null;
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -21,7 +22,7 @@ const ReactionTest: React.FC = () => {
     console.log("UserID:", userId);
     try {
       const response = await fetch(
-        `${apiUrl}/GenericGame/${userId}/start/2`, // 2 = reactiontest
+        `${apiUrl}/GenericGame/${sanitizedUserId}/start/2`, // 2 = reactiontest
         {
           method: "POST",
         }
@@ -48,8 +49,8 @@ const ReactionTest: React.FC = () => {
     reactionTime: number
   ) => {
     try {
-      const scoreData = {
-        userId: userId,
+      const addScoreDto = {
+        userId: sanitizedUserId,
         value: reactionTime, // Use the reaction time as the score
         dateAchieved: new Date().toISOString(),
         gameId: 1, 
@@ -57,13 +58,13 @@ const ReactionTest: React.FC = () => {
       };
 
       const response = await fetch(
-        `${apiUrl}/Game/${userId}/addscore?value=${scoreData.value}&dateAchieved=${scoreData.dateAchieved}&gameId=${scoreData.gameId}&gameType=${scoreData.gameType}`,
+        `${apiUrl}/GenericGame/${sanitizedUserId}/addscore`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(scoreData), 
+          body: JSON.stringify(addScoreDto), 
         }
       );
 

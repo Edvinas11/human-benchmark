@@ -14,8 +14,7 @@ public class GameSessionHandler<TGameType> where TGameType : struct, Enum
         _context = context;
         _scopeFactory = scopeFactory;
     }
-
-    
+  
 
     public async Task<GameSession> StartSessionAsync(int userId, TGameType gameType)
     {
