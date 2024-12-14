@@ -15,6 +15,12 @@ builder.Services.AddCors(options =>
         .AllowAnyMethod()
         .AllowAnyHeader();
     });
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
 });
 
 // Add services to the container.
@@ -41,7 +47,8 @@ builder.Services.AddSingleton(typeof(GameSessionHandler<>));
 
 var app = builder.Build();
 
-app.UseCors("AllowFrontend");
+// app.UseCors("AllowFrontend");
+app.UseCors("AllowAll");
 
 app.UseSwagger();
 app.UseSwaggerUI();
