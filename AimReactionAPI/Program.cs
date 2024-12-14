@@ -6,11 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin", builder =>
-    {
-        builder.WithOrigins("http://localhost:5173")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+    options.AddPolicy("AllowFrontend",
+    b => {
+        b.WithOrigins(builder.Configuration["Frontend:Url"]!)
+            .AllowAnyMethod()
+            .AllowAnyHeader();
     });
 });
 
@@ -38,7 +38,7 @@ builder.Services.AddScoped(typeof(GameSessionHandler<>));
 
 var app = builder.Build();
 
-app.UseCors("AllowSpecificOrigin");
+app.UseCors("AllowFrontend");
 
 app.UseSwagger();
 app.UseSwaggerUI();
