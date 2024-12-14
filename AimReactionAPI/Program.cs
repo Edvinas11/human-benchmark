@@ -9,7 +9,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend",
     b => {
         b.WithOrigins(
-            builder.Configuration["Frontend:Url"],
+            builder.Configuration["Frontend:Url"] ?? throw new ArgumentNullException("Frontend:Url"),
             "https://octopus-app-43esm.ondigitalocean.app"
         )
         .AllowAnyMethod()
@@ -26,8 +26,9 @@ builder.Services.AddControllers()
     });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(Environment.GetEnvironmentVariable("DefaultConnection") ?? 
-                      builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
