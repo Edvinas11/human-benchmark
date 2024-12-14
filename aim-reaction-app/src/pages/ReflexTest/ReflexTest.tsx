@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./ReflexTest.module.css";
 import { useAuth } from "../../contexts/AuthContext";
-import { useLocation } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import hitSound from "../../assets/Target-sound.mp3";
 import countSound from "../../assets/CountDown.mp3";
 import gameSound from "../../assets/GameStart-Sound.mp3";
@@ -14,89 +14,75 @@ const DIFFICULTY_SETTINGS = {
 
 const ReflexTest: React.FC = () => {
   const { userId } = useAuth();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const gameId = parseInt(searchParams.get("gameId") || "0", 10); // Default to 0 if invalid
+  const difficultyParam = searchParams.get("difficulty") || "easy";
+
+  const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("easy");
+  const [sessionId, setSessionId] = useState<number | null>(null);
   const [target, setTarget] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [missedTargets, setMissedTargets] = useState(0);
   const [gameActive, setGameActive] = useState(false);
-  const [sessionId, setSessionId] = useState<number | null>(null);
   const [expiryTimeout, setExpiryTimeout] = useState<NodeJS.Timeout | null>(null);
-  const [countdown, setCountdown] = useState<number | null>(null);
+  const [countdown, setCountdown] = useState<number | string | null>(null);
 
-  const location = useLocation();
-  const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("easy");
-
+  const sanitizedUserId = userId ? parseInt(userId, 10) : null;
   const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    if (location.state?.difficulty) {
-      setDifficulty(location.state.difficulty as "easy" | "medium" | "hard");
+    if (!gameId || isNaN(gameId)) {
+      console.error("Invalid or missing gameId in URL query.");
+      navigate("/"); // Redirect to a fallback route
     }
-  }, [location.state]);
 
-  useEffect(() => {
-    if (gameActive) {
-      startGameSession();
-    } else if (sessionId !== null) {
-      endGameSession(sessionId);
+    if (["easy", "medium", "hard"].includes(difficultyParam)) {
+      setDifficulty(difficultyParam as "easy" | "medium" | "hard");
+    } else {
+      console.error("Invalid difficulty level in query parameters.");
     }
-  }, [gameActive]);
-
-  useEffect(() => {
-    if (gameActive && target === null && missedTargets < 3) {
-      const { spawnInterval, expiryTime } = DIFFICULTY_SETTINGS[difficulty];
-
-      const spawnTimer = setTimeout(() => {
-        setTarget(Date.now());
-
-        const expiryTimer = setTimeout(() => {
-          setTarget(null);
-          setMissedTargets((prev) => prev + 1); // Increment missed targets
-        }, expiryTime);
-
-        setExpiryTimeout(expiryTimer);
-      }, spawnInterval);
-
-      return () => {
-        clearTimeout(spawnTimer);
-        if (expiryTimeout) clearTimeout(expiryTimeout);
-      };
-    } else if (missedTargets >= 3) {
-      if (gameActive) {
-        handleStopGame();
-      }
-    }
-  }, [gameActive, target, difficulty, missedTargets]);
+  }, [gameId, difficultyParam, navigate]);
 
   const startGameSession = async () => {
-    if (!userId) {
-      console.error("User ID is required to start a game session.");
+    if (!sanitizedUserId || !gameId) {
+      console.error("User ID and gameId are required to start a game session.");
       return;
     }
-    console.log("UserID:", userId);
+
     try {
       const response = await fetch(
-        `${apiUrl}/GenericGame/${userId}/start/1`, // 1 = reactiontest
+        `${apiUrl}/GenericGame/${sanitizedUserId}/start/${gameId}`,
         { method: "POST" }
       );
+
       if (!response.ok) {
-        throw new Error("Failed to start game session");
+        throw new Error(`Failed to start game session: ${response.statusText}`);
       }
 
-      const result = await response.json();
-      setSessionId(result.gameSessionId);
+      const session = await response.json();
+      setSessionId(session.gameSessionId);
+      setGameActive(true);
+      console.log("Session ID:", session.gameSessionId);
     } catch (error) {
       console.error("Error starting game session:", error);
     }
   };
 
-  const endGameSession = async (sessionId: number) => {
+  const endGameSession = async () => {
+    if (!sessionId) {
+      console.error("Session ID is required to end the session.");
+      return;
+    }
+
     try {
       const response = await fetch(`${apiUrl}/GenericGame/end/${sessionId}`, {
         method: "POST",
       });
 
       if (!response.ok) {
-        throw new Error("Failed to end game session");
+        throw new Error(`Failed to end game session: ${response.statusText}`);
       }
 
       const result = await response.json();
@@ -106,127 +92,142 @@ const ReflexTest: React.FC = () => {
     }
   };
 
-    const handleHitTarget = () => {
-     const targetHit = new Audio(hitSound);
-     targetHit.play();
-    
-     setScore((prev) => prev + 1);
-     setTarget(null);
-
-     if (expiryTimeout) {
-       clearTimeout(expiryTimeout);
-       setExpiryTimeout(null);
+  const saveScore = async (reactionScore: number) => {
+    if (!sanitizedUserId || !gameId) {
+      console.error("User ID and gameId are required to save the score.");
+      return;
     }
+
+    const scoreData = {
+      userId: sanitizedUserId,
+      value: reactionScore,
+      dateAchieved: new Date().toISOString(),
+      gameId,
+      gameType: 1, // Assuming gameType 1 for Reflex Test
     };
+
+    try {
+      const response = await fetch(`${apiUrl}/GenericGame/${sanitizedUserId}/addscore`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(scoreData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error saving score: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log("Score saved:", data);
+    } catch (error) {
+      console.error("Error saving score:", error);
+    }
+  };
 
   const handleStartGame = () => {
     setScore(0);
     setMissedTargets(0);
-    setTarget(null);
     setCountdown(3);
 
-      let countdownValue = 4;
-      const countdownInterval = setInterval(() => {
-          if (countdownValue > 1) {
-              const countdownSound = new Audio(countSound);
-              countdownSound.play();
-          }
-          countdownValue -= 1;
-          if (countdownValue === 0) {
-              const startSound = new Audio(gameSound);
-              startSound.play();
-              setCountdown("Go!"); // Show "Go!" for 1 second
-              setTimeout(() => {
-                  setCountdown(null); // Clear countdown
-                  setGameActive(true); // Start the game
-              }, 1000);
-              clearInterval(countdownInterval);
-          } else {
-              setCountdown(countdownValue);
-          }
-      }, 1000);
-    };
+    let countdownValue = 3;
+    const countdownInterval = setInterval(() => {
+      if (countdownValue > 1) {
+        const countdownSound = new Audio(countSound);
+        countdownSound.play();
+      }
+      countdownValue -= 1;
+      if (countdownValue === 0) {
+        const startSound = new Audio(gameSound);
+        startSound.play();
+        setCountdown("Go!");
+        setTimeout(() => {
+          setCountdown(null);
+          startGameSession(); // Start the session when countdown ends
+        }, 1000);
+        clearInterval(countdownInterval);
+      } else {
+        setCountdown(countdownValue);
+      }
+    }, 1000);
+  };
 
-  const handleStopGame = async () =>  { 
-    setGameActive(false);
+  const handleHitTarget = () => {
+    const targetHit = new Audio(hitSound);
+    targetHit.play();
+
+    setScore((prev) => prev + 1);
     setTarget(null);
 
     if (expiryTimeout) {
       clearTimeout(expiryTimeout);
       setExpiryTimeout(null);
     }
+  };
 
-    const scoreData = {
-      userId: userId, 
-      value: score, 
-      dateAchieved: new Date().toISOString(),
-      gameId: 1,
-      gameType: 1, 
-    };
-  
+  const handleStopGame = async () => {
+    setGameActive(false);
+    if (expiryTimeout) {
+      clearTimeout(expiryTimeout);
+    }
+
     try {
-      await saveScore(scoreData);
+      await saveScore(score);
+      await endGameSession();
     } catch (error) {
-      console.error("Error saving score:", error);
+      console.error("Error handling game stop:", error);
     }
   };
 
-  const saveScore = async (score: any) => {
-    try {
-      const response = await fetch(`https://localhost:8080/api/Game/${score.userId}/addscore?value=${score.value}&dateAchieved=${score.dateAchieved}&gameId=${score.gameId}&gameType=${score.gameType}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(score),  
-      });
-  
-      if (!response.ok) {
-        throw new Error(`Error saving score: ${response.statusText}`);
-      }
-  
-      const data = await response.json();
-      console.log('Score saved:', data);
-    } catch (error) {
-      console.error('Error saving score:', error);
-    }
-  };
+  useEffect(() => {
+    if (gameActive && target === null && missedTargets < 3) {
+      const { spawnInterval, expiryTime } = DIFFICULTY_SETTINGS[difficulty];
+      const spawnTimer = setTimeout(() => {
+        setTarget(Date.now());
+        const expiryTimer = setTimeout(() => {
+          setTarget(null);
+          setMissedTargets((prev) => prev + 1);
+        }, expiryTime);
+        setExpiryTimeout(expiryTimer);
+      }, spawnInterval);
 
-    return (
+      return () => {
+        clearTimeout(spawnTimer);
+        if (expiryTimeout) clearTimeout(expiryTimeout);
+      };
+    } else if (missedTargets >= 3 && gameActive) {
+      handleStopGame();
+    }
+  }, [gameActive, target, missedTargets, difficulty]);
+
+  return (
     <div className={styles.container}>
-        <h2>Reflex Test</h2>
-
-        {!gameActive && countdown === null ? (
-            <div>
-                <button onClick={handleStartGame}>Start Game</button>
-            </div>
-        ) : (
-            <div className={styles.scoreRow}>
-                <span className={styles.score}> Score: {score} </span>
-                <span className = {styles.missedTargets}>Missed Targets: {missedTargets} / 3</span>
-                <button onClick={handleStopGame}>Stop Game</button>
-            </div>
-        )}
-
-        <div className={styles.targetArea}>
-            {countdown !== null && (
-                <div className={styles.countdown}>{countdown}</div>
-            )}
-
-            {target !== null && (
-                <div
-                    className={styles.target}
-                    style={{
-                        top: `${Math.random() * 80}%`,
-                        left: `${Math.random() * 80}%`,
-                    }}
-                    onClick={handleHitTarget}
-                />
-            )}
+      <h2>Reflex Test</h2>
+      {!gameActive && countdown === null ? (
+        <button onClick={handleStartGame}>Start Game</button>
+      ) : (
+        <div className={styles.scoreRow}>
+          <span className={styles.score}>Score: {score}</span>
+          <span className={styles.missedTargets}>Missed: {missedTargets} / 3</span>
+          <button onClick={handleStopGame}>Stop Game</button>
         </div>
+      )}
+      <div className={styles.targetArea}>
+        {countdown !== null && <div className={styles.countdown}>{countdown}</div>}
+        {target !== null && (
+          <div
+            className={styles.target}
+            style={{
+              top: `${Math.random() * 80}%`,
+              left: `${Math.random() * 80}%`,
+            }}
+            onClick={handleHitTarget}
+          />
+        )}
+      </div>
     </div>
   );
 };
 
 export default ReflexTest;
-

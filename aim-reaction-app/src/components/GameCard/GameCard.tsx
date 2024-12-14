@@ -8,22 +8,20 @@ import GameImage from "../../assets/descr.png"
 import { useNavigate } from "react-router-dom";
 import { GameType } from "../GameType/GameType";
 
-
 const GameCard: React.FC<GameCardProps> = ({ game }) => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
     console.log("Game object:", game); // Debugging line
     switch (game.gameDescription.gameType) {
-        // case GameType.ReflexTest:
-        //   navigate('/reflex-test', { state: { difficulty: game.gameDifficulty } });
-        //   break;
+        case GameType.ReflexTest:
+          navigate(`/reflex-test?gameId=${game.gameId}&difficulty=${game.gameDifficulty}`);
+          break;
         case GameType.ReactionTimeChallenge:
           navigate(`/reaction-test?gameId=${game.gameId}`);
           break;
         default:
           break;
-      
     }
   }
   
