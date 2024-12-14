@@ -4,14 +4,19 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var frontendUrl = builder.Configuration["Frontend:Url"];
+if (string.IsNullOrWhiteSpace(frontendUrl))
+{
+    throw new ArgumentNullException("Frontend:Url", "Frontend URL is not configured. Please set 'Frontend:Url' in appsettings.json or environment variables.");
+}
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
     b => {
-        b.WithOrigins(
-            builder.Configuration["Frontend:Url"]!)
-        .AllowAnyMethod()
-        .AllowAnyHeader();
+        b.WithOrigins(frontendUrl)
+         .AllowAnyMethod()
+         .AllowAnyHeader();
     });
 });
 
