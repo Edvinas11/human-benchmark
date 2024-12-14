@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./LeaderboardTable.module.css";
 import { Score } from "../../types/props";
 import Button from "../Button/Button";

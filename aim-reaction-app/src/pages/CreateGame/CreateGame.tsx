@@ -1,5 +1,3 @@
-import React from 'react'
-
 import styles from './CreateGame.module.css'
 import ConfigForm from '../../components/ConfigForm/ConfigForm'
 

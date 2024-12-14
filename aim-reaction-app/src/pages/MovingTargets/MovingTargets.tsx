@@ -1,5 +1,3 @@
-import React, { useState } from 'react'
-
 const MovingTarget: React.FC = () => {
     return (
       <div>

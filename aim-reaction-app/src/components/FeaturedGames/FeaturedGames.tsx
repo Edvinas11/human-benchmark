@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import styles from "./FeaturedGames.module.css";
 import GameCard from "../GameCard/GameCard";
 
 import { Game } from "../../types/props";
-import Button from "../Button/Button";
-import { useNavigate } from "react-router-dom";
 
 const FeaturedGames = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [activeUserCount, setActiveUserCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  const navigate = useNavigate();
 
   const apiUrl = import.meta.env.VITE_API_URL;
 

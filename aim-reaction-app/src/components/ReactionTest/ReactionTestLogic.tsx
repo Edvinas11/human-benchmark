@@ -5,6 +5,7 @@ import styles from "./ReactionTestLogic.module.css"; // Import CSS styles
 const ReactionTestLogic: React.FC<any> = ({ onTestComplete, sessionId, goBackToStart }) => {
   const [waitingForClick, setWaitingForClick] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
+  // @ts-ignore
   const [reactionTime, setReactionTime] = useState<number | null>(null);
 
   const apiUrl = import.meta.env.VITE_API_URL;

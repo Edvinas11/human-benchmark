@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./ReactionTest.module.css";
 import StartGame from "../../components/StartGame/StartGame";
 import ReactionTestLogic from "../../components/ReactionTest/ReactionTestLogic";
 import { useAuth } from "../../contexts/AuthContext";
-import { useSearchParams, useNavigate } from "react-router-dom";
-import { parse } from "path";
+import { useSearchParams } from "react-router-dom";
 
 const ReactionTest: React.FC = () => {
   const { userId } = useAuth();
 
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
 
   const gameId = searchParams.get("gameId");
 

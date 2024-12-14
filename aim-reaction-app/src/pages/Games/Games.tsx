@@ -1,4 +1,3 @@
-import React from 'react'
 import FeaturedGames from '../../components/FeaturedGames/FeaturedGames'
 
 const Games = () => {
