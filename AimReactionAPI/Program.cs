@@ -36,8 +36,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddHealthChecks();
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -61,17 +59,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.MapHealthChecks("/health");
-
-app.Use(async (context, next) =>
-{
-    if (context.Request.Path.StartsWithSegments("/favicon.ico"))
-    {
-        context.Response.StatusCode = 204;
-        return;
-    }
-    await next();
-});
 
 app.Run();
