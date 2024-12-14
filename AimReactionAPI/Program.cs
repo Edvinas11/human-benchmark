@@ -9,17 +9,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend",
     b => {
         b.WithOrigins(
-            builder.Configuration["Frontend:Url"] ?? throw new ArgumentNullException("Frontend:Url"),
-            "https://octopus-app-43esm.ondigitalocean.app"
-        )
+            builder.Configuration["Frontend:Url"]!)
         .AllowAnyMethod()
         .AllowAnyHeader();
-    });
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
     });
 });
 
@@ -45,10 +37,11 @@ builder.Services.AddScoped<TargetService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddSingleton(typeof(GameSessionHandler<>));
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
-// app.UseCors("AllowFrontend");
-app.UseCors("AllowAll");
+app.UseCors("AllowFrontend");
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -59,5 +52,17 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health");
+
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/favicon.ico"))
+    {
+        context.Response.StatusCode = 204;
+        return;
+    }
+    await next();
+});
 
 app.Run();
