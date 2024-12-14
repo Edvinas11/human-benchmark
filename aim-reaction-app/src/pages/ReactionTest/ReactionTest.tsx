@@ -3,26 +3,35 @@ import styles from "./ReactionTest.module.css";
 import StartGame from "../../components/StartGame/StartGame";
 import ReactionTestLogic from "../../components/ReactionTest/ReactionTestLogic";
 import { useAuth } from "../../contexts/AuthContext";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { parse } from "path";
 
 const ReactionTest: React.FC = () => {
   const { userId } = useAuth();
+
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const gameId = searchParams.get("gameId");
+
   const [sessionId, setSessionId] = useState<number | null>(null);
   const [reactionTime, setReactionTime] = useState<number | null>(null);
   const [showReactionTest, setShowReactionTest] = useState(false);
   const [testStarted, setTestStarted] = useState(false);
+
   const sanitizedUserId = userId ? parseInt(userId, 10) : null;
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const startGameSession = async () => {
-    if (!userId) {
+    if (!userId || !gameId) {
       console.error("User ID is required to start a game session.");
       return;
     }
     console.log("UserID:", userId);
     try {
       const response = await fetch(
-        `${apiUrl}/GenericGame/${sanitizedUserId}/start/2`, // 2 = reactiontest
+        `${apiUrl}/GenericGame/${sanitizedUserId}/start/${gameId}`, // 2 = reactiontest
         {
           method: "POST",
         }
@@ -45,7 +54,6 @@ const ReactionTest: React.FC = () => {
   };
 
   const recordReactionTime = async (
-    sessionId: number,
     reactionTime: number
   ) => {
     try {
@@ -53,7 +61,7 @@ const ReactionTest: React.FC = () => {
         userId: sanitizedUserId,
         value: reactionTime, // Use the reaction time as the score
         dateAchieved: new Date().toISOString(),
-        gameId: 1, 
+        gameId: gameId, 
         gameType: 2,
       };
 
@@ -93,7 +101,7 @@ const ReactionTest: React.FC = () => {
 
     if (sessionId) {
       // Save score when the reaction test is complete
-      recordReactionTime(sessionId, reactionTime);
+      recordReactionTime(reactionTime);
       endGameSession();
     }
   };

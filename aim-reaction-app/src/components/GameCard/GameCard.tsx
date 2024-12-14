@@ -15,14 +15,11 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
   const handleNavigate = () => {
     console.log("Game object:", game); // Debugging line
     switch (game.gameDescription.gameType) {
-        case GameType.MovingTargets:
-          navigate('/movingTargets');
-          break;
-        case GameType.ReflexTest:
-          navigate('/reflex-test', { state: { difficulty: game.gameDifficulty } });
-          break;
+        // case GameType.ReflexTest:
+        //   navigate('/reflex-test', { state: { difficulty: game.gameDifficulty } });
+        //   break;
         case GameType.ReactionTimeChallenge:
-          navigate('reaction-test');
+          navigate(`/reaction-test?gameId=${game.gameId}`);
           break;
         default:
           break;

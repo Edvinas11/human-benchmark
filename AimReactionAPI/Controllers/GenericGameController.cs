@@ -41,6 +41,7 @@ public class GenericGameController : ControllerBase
         var games = await _context.Games
             .Select(g => new
             {
+                GameId = g.GameId,
                 GameDescription = new GameDescription(g.GameName, g.GameDescription, g.GameType),
                 GameDifficulty = g.DifficultyLevel
             })

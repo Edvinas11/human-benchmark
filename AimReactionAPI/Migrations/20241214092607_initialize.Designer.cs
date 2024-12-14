@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AimReactionAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241209203627_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241214092607_initialize")]
+    partial class initialize
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
