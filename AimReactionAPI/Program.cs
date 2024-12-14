@@ -37,8 +37,6 @@ builder.Services.AddScoped<TargetService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddSingleton(typeof(GameSessionHandler<>));
 
-builder.Services.AddHealthChecks();
-
 var app = builder.Build();
 
 app.UseCors("AllowFrontend");
@@ -52,17 +50,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.MapHealthChecks("/health");
-
-app.Use(async (context, next) =>
-{
-    if (context.Request.Path.StartsWithSegments("/favicon.ico"))
-    {
-        context.Response.StatusCode = 204;
-        return;
-    }
-    await next();
-});
 
 app.Run();
