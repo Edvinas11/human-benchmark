@@ -7,14 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddCors(options =>
     {
-        options.AddPolicy("AllowFrontend",
-        b =>
+        options.AddPolicy("AllowAll",
+        policy =>
         {
-            b.WithOrigins(builder.Configuration["Frontend:Url"]!)
-                .AllowAnyMethod()
-                .AllowAnyHeader();
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
         });
-
     });
 
 // Add services to the container.
@@ -41,7 +40,7 @@ builder.Services.AddSingleton(typeof(GameSessionHandler<>));
 
 var app = builder.Build();
 
-app.UseCors("AllowFrontend");
+app.UseCors("AllowAll");
 
 app.UseSwagger();
 app.UseSwaggerUI();
