@@ -63,11 +63,6 @@ const LeaderboardTable = () => {
                         }
                         onClick={() => handleGameTypeChange(GameType.ReactionTimeChallenge)}
                     />
-                    <Button
-                        label="Moving Targets"
-                        variant={gameType === GameType.MovingTargets ? "third" : "primary"}
-                        onClick={() => handleGameTypeChange(GameType.MovingTargets)}
-                    />
                 </div>
 
                 {!gameType && <p>Please select a game type to view the leaderboard.</p>}

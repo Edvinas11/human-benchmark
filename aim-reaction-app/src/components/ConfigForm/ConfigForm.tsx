@@ -99,9 +99,7 @@ const ConfigForm = () => {
             required
           >
             <option value="">Choose a game type</option>
-            <option value="MovingTargets">MovingTargets</option>
             <option value="ReflexTest">ReflexTest</option>
-            <option value="CustomChallenge">CustomChallenge</option>
             <option value="ReactionTest">ReactionTest</option>
           </select>
         </div>

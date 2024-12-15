@@ -36,7 +36,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<GameService>();
 builder.Services.AddScoped<TargetService>();
 builder.Services.AddScoped<AuthService>();
-builder.Services.AddSingleton(typeof(GameSessionHandler<>));
+builder.Services.AddScoped(typeof(GameSessionHandler<>));
 
 var app = builder.Build();
 

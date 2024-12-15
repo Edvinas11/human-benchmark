@@ -53,7 +53,7 @@ const ReflexTest: React.FC = () => {
 
     try {
       const response = await fetch(
-        `${apiUrl}/GenericGame/${sanitizedUserId}/start/${gameId}`,
+        `${apiUrl}/GenericGame/${sanitizedUserId}/start/1`,
         { method: "POST" }
       );
 

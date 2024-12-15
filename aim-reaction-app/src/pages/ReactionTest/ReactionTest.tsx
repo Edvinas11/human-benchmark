@@ -29,7 +29,7 @@ const ReactionTest: React.FC = () => {
     console.log("UserID:", userId);
     try {
       const response = await fetch(
-        `${apiUrl}/GenericGame/${sanitizedUserId}/start/${gameId}`, // 2 = reactiontest
+        `${apiUrl}/GenericGame/${sanitizedUserId}/start/2`, // 2 = reactiontest
         {
           method: "POST",
         }
