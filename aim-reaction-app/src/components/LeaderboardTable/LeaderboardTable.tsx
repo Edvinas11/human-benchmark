@@ -11,7 +11,7 @@ const LeaderboardTable = () => {
     const [gameType, setGameType] = useState<GameType | null>(null); // Start with no gameType selected
 
     const apiUrl = import.meta.env.VITE_API_URL;
-    const topCount = 10;
+    const topCount = 100;
 
     // Fetch leaderboard scores based on gameType
     const fetchScores = async (selectedGameType: GameType) => {
