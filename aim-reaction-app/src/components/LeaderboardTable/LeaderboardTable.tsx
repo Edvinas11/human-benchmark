@@ -45,7 +45,14 @@ const LeaderboardTable = () => {
         }
     };
 
-    const sortedScores = scores.sort((a, b) => b.score - a.score);
+    const sortedScores = scores.sort((a, b) => {
+        if (gameType === GameType.ReactionTimeChallenge) {
+            return a.score - b.score;
+        } else {
+            
+            return b.score - a.score; 
+        }
+    });
 
     return (
         <div>
